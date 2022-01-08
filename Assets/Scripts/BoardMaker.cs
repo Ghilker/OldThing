@@ -6,19 +6,27 @@ using Helper;
 public class BoardMaker : MonoBehaviour
 {
     [SerializeField]
+    //All the rooms made in the current level
     List<GameObject> generatedRooms;
 
     [SerializeField]
+    //List of vector3 that indicates the generated rooms positions
     List<Vector3> roomPositions = new List<Vector3>();
 
+    //List of the random empty spots in the grid
     List<Vector3> randomPositions = new List<Vector3>();
 
+    //Current room generator
     public RoomGenerator gen;
 
+    //Main holder for all game objects
     GameObject Board;
+    //Max dept that the rooms can reach
     public int maxRoomDepth = 4;
+    //Size of the rooms
     public RoomSize roomSize;
 
+    //Reference to the camera
     Camera mainCamera;
 
     private void Start()
@@ -38,11 +46,13 @@ public class BoardMaker : MonoBehaviour
 
     void CreateRoom()
     {
+        //Creation of the first room
         generatedRooms = new List<GameObject>();
         GameObject firstRoom = gen.GenerateRoom(Vector2.zero, true);
         roomPositions.Add(firstRoom.transform.position);
         firstRoom.transform.SetParent(Board.transform);
         generatedRooms.Add(firstRoom);
+        //Adjusting position of the camera to the center of the first room
         Vector3 cameraPosition = new Vector3((firstRoom.GetComponent<roomStats>().width + 1) / 2, (firstRoom.GetComponent<roomStats>().width + 1) / 2, -10f);
         mainCamera.transform.position = cameraPosition + new Vector3(0.5f, 0.5f, 0f);
         BranchOut(firstRoom);
