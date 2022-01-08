@@ -27,6 +27,7 @@ jobs:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
           unityVersion: 2020.3.11f1
+          allowDirtyBuild: true
 
       # Build
       - name: Build project
@@ -36,6 +37,7 @@ jobs:
         with:
           unityVersion: 2020.3.11f1
           targetPlatform: StandaloneWindows64 
+          allowDirtyBuild: true
 
       # Output 
       - uses: actions/upload-artifact@v2
