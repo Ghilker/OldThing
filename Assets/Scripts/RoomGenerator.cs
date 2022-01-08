@@ -17,11 +17,11 @@ public class RoomGenerator : ScriptableObject
 
     public GameObject door;
 
-    public GameObject player;
-
+    [HideInInspector]
     public int roomSize = 8;
 
-    public int obstacleRandomness = 25;
+    public int monsterSpawnerAmount = 4;
+    public ObstacleRandomness obstacleRandomness = ObstacleRandomness.LOW;
 
     private List<Vector3> gridPositions = new List<Vector3>();
 
@@ -44,7 +44,7 @@ public class RoomGenerator : ScriptableObject
         }
     }
 
-    public GameObject GenerateRoom(Vector2 roomPosition, bool firstRoom = false)
+    public GameObject GenerateRoom(Vector2 roomPosition, bool firstRoom = false, bool specialRoom = false)
     {
         InitialiseList();
         GameObject instancedRoom = Instantiate(roomHolder, Vector3.zero, Quaternion.identity);
@@ -96,7 +96,7 @@ public class RoomGenerator : ScriptableObject
                 else
                 {
                     instance.transform.SetParent(floorHolder.transform);
-                    if (RandomHelper.prob(obstacleRandomness) && (x != middleSize && y != middleSize) && !firstRoom)
+                    if (RandomHelper.prob((int)obstacleRandomness) && (x != middleSize && y != middleSize) && !firstRoom && !specialRoom)
                     {
                         GameObject obstacleToInstantiate = obstacleArray[Random.Range(0, obstacleArray.Length)];
                         GameObject obstacleInstance = Instantiate(obstacleToInstantiate, new Vector3(x, y, 0f), Quaternion.identity);
@@ -107,12 +107,12 @@ public class RoomGenerator : ScriptableObject
             }
         }
 
-        if (!firstRoom)
+        if (!firstRoom && !specialRoom)
         {
             GameObject monsterHolder = new GameObject("monsterHolder");
             monsterHolder.transform.SetParent(instancedRoom.transform);
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < monsterSpawnerAmount; i++)
             {
                 Vector3 monsterPosition = RandomPosition();
                 RaycastHit2D hit = Physics2D.Raycast(monsterPosition, Vector2.zero);
@@ -126,9 +126,6 @@ public class RoomGenerator : ScriptableObject
 
             }
         }
-        else
-            Instantiate(player, new Vector3(middleSize, middleSize, 0f), Quaternion.identity);
-
         instancedRoom.name = instancedRoom.name + "_" + obstacleNumbers + "-obstacles";
         instancedRoom.transform.localPosition = Vector3.zero;
         instancedRoom.transform.position = roomPosition;
@@ -172,4 +169,11 @@ public enum direction
     SOUTH = (1 << 1),
     EAST = (1 << 2),
     WEST = (1 << 3)
+}
+
+public enum ObstacleRandomness
+{
+    LOW = 5,
+    MID = 10,
+    HIGH = 15
 }

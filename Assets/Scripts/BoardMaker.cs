@@ -19,12 +19,18 @@ public class BoardMaker : MonoBehaviour
     //Current room generator
     public RoomGenerator gen;
 
+    public GameObject player;
+
     //Main holder for all game objects
     GameObject Board;
     //Max dept that the rooms can reach
     public int maxRoomDepth = 4;
     //Size of the rooms
     public RoomSize roomSize;
+
+    public int specialRoomRarity = 5;
+    public int maxSpecialRooms = 3;
+    public int currentSpecialRooms = 0;
 
     //Reference to the camera
     Camera mainCamera;
@@ -56,7 +62,10 @@ public class BoardMaker : MonoBehaviour
         //Adjusting position of the camera to the center of the first room
         Vector3 cameraPosition = new Vector3((firstRoom.GetComponent<roomStats>().width + 1) / 2, (firstRoom.GetComponent<roomStats>().width + 1) / 2, -10f);
         mainCamera.transform.position = cameraPosition + new Vector3(0.5f, 0.5f, 0f);
+        int middleSize = firstRoom.GetComponent<roomStats>().width / 2;
+        Instantiate(player, new Vector3(middleSize, middleSize, 0f), Quaternion.identity);
         BranchOut(firstRoom);
+
     }
 
     void BranchOut(GameObject startingRoom)
@@ -113,8 +122,15 @@ public class BoardMaker : MonoBehaviour
                 continue;
             }
 
+            bool isSpecialRoom = false;
+            if (currentSpecialRooms < maxSpecialRooms && RandomHelper.prob(specialRoomRarity))
+            {
+                isSpecialRoom = true;
+                currentSpecialRooms++;
+            }
+
             roomPositions.Add(newRoomPosition);
-            GameObject otherRoomObj = gen.GenerateRoom(newRoomPosition);
+            GameObject otherRoomObj = gen.GenerateRoom(newRoomPosition, false, isSpecialRoom);
             roomStats otherRoomStat = otherRoomObj.GetComponent<roomStats>();
             connector.GetComponent<ConnectorStat>().connected = true;
             starterRoom.Connect(otherRoomObj);
@@ -155,8 +171,6 @@ public class BoardMaker : MonoBehaviour
             {
                 BranchOut(otherRoomObj);
             }
-
-
         }
     }
 
