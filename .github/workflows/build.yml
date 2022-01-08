@@ -23,12 +23,16 @@ jobs:
       # Test
       - name: Run tests
         uses: game-ci/unity-test-runner@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
           unityVersion: 2020.3.11f1
 
       # Build
       - name: Build project
         uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
           unityVersion: 2020.3.11f1
           targetPlatform: StandaloneWindows64 
