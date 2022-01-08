@@ -38,6 +38,7 @@ public class BoardMaker : MonoBehaviour
 
     void GenerateBoard()
     {
+        //Create board holder
         Board = new GameObject("BoardHolder");
         CreateRoom();
         SealDungeon();
