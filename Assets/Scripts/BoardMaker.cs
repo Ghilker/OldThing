@@ -34,7 +34,6 @@ public class BoardMaker : MonoBehaviour
         CreateRoom();
         SealDungeon();
         HideDungeon();
-
     }
 
     void CreateRoom()
