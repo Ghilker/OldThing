@@ -38,11 +38,6 @@ public class BoardMaker : MonoBehaviour
 
     private void Start()
     {
-        /*foreach (RoomGenerator gen in roomGenerators)
-        {
-            gen.width = (int)roomSize;
-            gen.height = (int)roomSize;
-        }*/
         pickedGenerator = roomGenerators[Random.Range(0, roomGenerators.Length)];
         mainCamera = Camera.main;
         GenerateBoard();
