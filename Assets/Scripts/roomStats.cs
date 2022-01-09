@@ -14,6 +14,10 @@ public class roomStats : MonoBehaviour
     public List<GameObject> doors;
     [EnumFlagsAttribute] public direction connectedDirs;
     public int roomDepth = 0;
+    public bool isActive = true;
+    public List<GameObject> monsters = new List<GameObject>();
+    public List<GameObject> monsterSpawners = new List<GameObject>();
+    bool canSpawn = true;
 
 
     public void Connect(GameObject otherRoom)
@@ -28,4 +32,48 @@ public class roomStats : MonoBehaviour
         connectedRooms.Add(otherRoom);
         connectedDirections.Add(dir);
     }
+
+    private void Update()
+    {
+        if (!isActive) { return; }
+        bool shouldDeactivate = true;
+        if (canSpawn)
+        {
+            SpawnMonsters();
+            canSpawn = false;
+        }
+        foreach (GameObject monster in monsters)
+        {
+            if (monster.GetComponent<MonsterStats>().isAlive)
+            {
+                shouldDeactivate = false;
+                break;
+            }
+        }
+        if (!shouldDeactivate)
+        {
+            return;
+        }
+        isActive = false;
+        foreach (GameObject door in doors)
+        {
+            door.GetComponent<DoorStats>().DoorDisable();
+        }
+    }
+
+    void SpawnMonsters()
+    {
+        foreach (GameObject monsterSpawner in monsterSpawners)
+        {
+            if (monsterSpawner.GetComponent<MonsterSpawn>().canSpawn)
+            {
+                monsterSpawner.GetComponent<MonsterSpawn>().SpawnMonsters();
+            }
+        }
+        foreach (GameObject door in doors)
+        {
+            door.GetComponent<DoorStats>().DoorEnable();
+        }
+    }
+
 }

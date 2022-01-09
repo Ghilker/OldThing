@@ -44,6 +44,7 @@ public class DoorStats : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             connectingRoom.SetActive(true);
+            connectingRoom.GetComponent<roomStats>().isActive = true;
             other.GetComponent<CharacterMovement>().enabled = false;
             DoorDisable();
             Vector3 playerPosition = DirectionalMovement.MoveTo(dir, otherDoorObj.transform.position);

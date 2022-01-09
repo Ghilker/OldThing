@@ -17,9 +17,6 @@ public class CharacterMovement : MonoBehaviour
         GetComponent<Rigidbody2D>().velocity = movement * speed;
     }
 
-
-
-
     IEnumerator Teleport()
     {
         teleporting = true;

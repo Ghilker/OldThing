@@ -17,8 +17,8 @@ public class RoomGenerator : ScriptableObject
 
     public GameObject door;
 
-    [HideInInspector]
-    public int roomSize = 8;
+    public int width = 8;
+    public int height = 8;
 
     public int monsterSpawnerAmount = 4;
     public ObstacleRandomness obstacleRandomness = ObstacleRandomness.LOW;
@@ -33,10 +33,10 @@ public class RoomGenerator : ScriptableObject
         gridPositions.Clear();
 
         //Loop through x axis (columns).
-        for (int x = 1; x < roomSize - 1; x++)
+        for (int x = 1; x < width - 1; x++)
         {
             //Within each column, loop through y axis (rows).
-            for (int y = 1; y < roomSize - 1; y++)
+            for (int y = 1; y < height - 1; y++)
             {
                 //At each index add a new Vector3 to our list with the x and y coordinates of that position.
                 gridPositions.Add(new Vector3(x, y, 0f));
@@ -48,34 +48,36 @@ public class RoomGenerator : ScriptableObject
     {
         InitialiseList();
         GameObject instancedRoom = Instantiate(roomHolder, Vector3.zero, Quaternion.identity);
-        instancedRoom.name = "room_" + roomSize + "x" + roomSize;
+        instancedRoom.name = "room_" + width + "x" + height;
         instancedRoom.tag = "RoomHolder";
         roomStats instancedRoomStats = instancedRoom.GetComponent<roomStats>();
-        instancedRoomStats.width = roomSize;
-        instancedRoomStats.height = roomSize;
+        instancedRoomStats.width = width;
+        instancedRoomStats.height = height;
         instancedRoomStats.roomCoordinates = roomPosition;
         GameObject wallHolder = new GameObject("wallHolder");
         GameObject floorHolder = new GameObject("floorHolder");
         wallHolder.transform.SetParent(instancedRoom.transform);
         floorHolder.transform.SetParent(instancedRoom.transform);
         int obstacleNumbers = 0;
-        int middleSize = Mathf.RoundToInt(roomSize / 2f);
+
+        int middleX = Mathf.RoundToInt(width / 2f);
+        int middleY = Mathf.RoundToInt(height / 2f);
         bool isWall = false;
-        for (int x = 0; x <= roomSize; x++)
+        for (int x = 0; x <= width; x++)
         {
-            for (int y = 0; y <= roomSize; y++)
+            for (int y = 0; y <= height; y++)
             {
                 isWall = false;
                 GameObject toInstantiate = floorArray[Random.Range(0, floorArray.Length)];
-                if ((x == 0 || x == roomSize || y == 0 || y == roomSize) && (x != middleSize && y != middleSize))
+                if ((x == 0 || x == width || y == 0 || y == height) && (x != middleX && y != middleY))
                 {
                     isWall = true;
                     toInstantiate = wallArray[Random.Range(0, wallArray.Length)];
                 }
-                if ((x == 0 || x == roomSize || y == 0 || y == roomSize) && (x == middleSize || y == middleSize))
+                if ((x == 0 || x == width || y == 0 || y == height) && (x == middleX || y == middleY))
                 {
-                    direction dir = CheckDirection(x, y, middleSize, middleSize);
-                    GameObject placedDoor = Instantiate(door, new Vector3(x, y, 0f), Quaternion.identity);
+                    direction dir = CheckDirection(x, y, middleX, middleY);
+
                     Vector3 connectorPosition = DirectionalMovement.GetVectorOffsetInDir(dir, new Vector3(x, y, 0f));
 
                     GameObject connector = Instantiate(outsideConnector, connectorPosition, Quaternion.identity);
@@ -83,6 +85,7 @@ public class RoomGenerator : ScriptableObject
                     connector.tag = "Connector";
                     connector.transform.SetParent(instancedRoom.transform);
                     connector.GetComponent<ConnectorStat>().dir = dir;
+                    GameObject placedDoor = Instantiate(door, new Vector3(x, y, 0f), Quaternion.identity);
                     placedDoor.name = "door_" + dir;
                     placedDoor.transform.SetParent(instancedRoom.transform);
                     placedDoor.GetComponent<DoorStats>().dir = dir;
@@ -96,7 +99,7 @@ public class RoomGenerator : ScriptableObject
                 else
                 {
                     instance.transform.SetParent(floorHolder.transform);
-                    if (RandomHelper.prob((int)obstacleRandomness) && (x != middleSize && y != middleSize) && !firstRoom && !specialRoom)
+                    if (RandomHelper.prob((int)obstacleRandomness) && (x != middleX && y != middleY) && !firstRoom && !specialRoom)
                     {
                         GameObject obstacleToInstantiate = obstacleArray[Random.Range(0, obstacleArray.Length)];
                         GameObject obstacleInstance = Instantiate(obstacleToInstantiate, new Vector3(x, y, 0f), Quaternion.identity);
@@ -123,6 +126,9 @@ public class RoomGenerator : ScriptableObject
                 }
                 GameObject monsterSpawn = Instantiate(monsterSpawner, monsterPosition, Quaternion.identity);
                 monsterSpawn.transform.SetParent(monsterHolder.transform);
+                monsterSpawn.GetComponent<MonsterSpawn>().room = instancedRoomStats;
+                monsterSpawn.GetComponent<MonsterSpawn>().canSpawn = true;
+                instancedRoomStats.monsterSpawners.Add(monsterSpawn);
 
             }
         }
