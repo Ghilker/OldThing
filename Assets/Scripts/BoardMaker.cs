@@ -67,11 +67,12 @@ public class BoardMaker : MonoBehaviour
         roomStats firstRoomStats = firstRoom.GetComponent<roomStats>();
         firstRoomStats.roomCoordinates = Vector2.zero;
         roomPositions.Add(firstRoomStats.roomCoordinates);
+        int middleX = firstRoomStats.width / 2;
+        int middleY = firstRoomStats.height / 2;
         //Adjusting position of the camera to the center of the first room
-        Vector3 cameraPosition = new Vector3((firstRoomStats.width + 1) / 2, (firstRoomStats.width + 1) / 2, -10f);
+        Vector3 cameraPosition = new Vector3((firstRoomStats.width + 1) / 2, (firstRoomStats.height + 1) / 2, -10f);
         mainCamera.transform.position = cameraPosition + new Vector3(0.5f, 0.5f, 0f);
-        int middleSize = firstRoomStats.width / 2;
-        Instantiate(player, new Vector3(middleSize, middleSize, 0f), Quaternion.identity);
+        Instantiate(player, new Vector3(middleX, middleY, 0f), Quaternion.identity);
         BranchOut(firstRoom);
 
     }
@@ -82,7 +83,7 @@ public class BoardMaker : MonoBehaviour
         List<GameObject> doors = SearchChildren.SearchForTag(startingRoom, "Door");
         roomStats startingRoomStats = startingRoom.GetComponent<roomStats>();
         List<direction> directions = new List<direction>() { direction.NORTH, direction.EAST, direction.SOUTH, direction.WEST };
-        /*int randomToRemove = Random.Range(0, directions.Count);
+        int randomToRemove = Random.Range(0, directions.Count);
         directions.Remove(directions[randomToRemove]);
         if (RandomHelper.prob(25))
         {
@@ -93,7 +94,7 @@ public class BoardMaker : MonoBehaviour
                 randomToRemove = Random.Range(0, directions.Count);
                 directions.Remove(directions[randomToRemove]);
             }
-        }*/
+        }
 
         foreach (direction dir in directions)
         {

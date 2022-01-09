@@ -78,7 +78,7 @@ public class RoomGenerator : ScriptableObject
                 {
                     Vector3 currentXY = new Vector3(x, y, 0f);
 
-                    direction dir = DirectionalMovement.CheckVectorialDirection(currentXY, middlePoint);
+                    direction dir = DirectionalMovement.CheckVectorialDirection(middlePoint, currentXY);
 
                     Vector3 connectorPosition = DirectionalMovement.GetVectorOffsetInDir(dir, new Vector3(x, y, 0f));
 

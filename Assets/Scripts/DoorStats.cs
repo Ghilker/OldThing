@@ -57,7 +57,7 @@ public class DoorStats : MonoBehaviour
 
     void UpdateCamera()
     {
-        Vector3 cameraPosition = new Vector3((connectingRoom.GetComponent<roomStats>().width + 1) / 2, (connectingRoom.GetComponent<roomStats>().width + 1) / 2, -10f);
+        Vector3 cameraPosition = new Vector3((connectingRoom.GetComponent<roomStats>().width + 1) / 2, (connectingRoom.GetComponent<roomStats>().height + 1) / 2, -10f);
         Camera.main.transform.position = connectingRoom.transform.position + cameraPosition + new Vector3(0.5f, 0.5f, 0f);
     }
 
