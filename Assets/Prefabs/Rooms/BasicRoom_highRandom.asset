@@ -27,7 +27,7 @@ MonoBehaviour:
   - {fileID: 2490617431158514342, guid: 448b23bf502dcc142a8e8a69e6261c25, type: 3}
   - {fileID: 1083304521653352805, guid: acaf2b5c875c577468c000cc097cfe91, type: 3}
   door: {fileID: 3572056514483179247, guid: 1b0f3985b51c18f47bf95c8963dc49fc, type: 3}
-  width: 10
+  width: 20
   height: 10
   monsterSpawnerAmount: 6
   obstacleRandomness: 15
