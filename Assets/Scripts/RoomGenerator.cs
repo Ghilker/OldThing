@@ -82,16 +82,9 @@ public class RoomGenerator : ScriptableObject
 
                     Vector3 connectorPosition = DirectionalMovement.GetVectorOffsetInDir(dir, new Vector3(x, y, 0f));
 
-                    GameObject connector = Instantiate(outsideConnector, connectorPosition, Quaternion.identity);
-                    connector.name = "connector_" + dir;
-                    connector.tag = "Connector";
-                    connector.transform.SetParent(instancedRoom.transform);
-                    connector.GetComponent<ConnectorStat>().dir = dir;
-                    GameObject placedDoor = Instantiate(door, new Vector3(x, y, 0f), Quaternion.identity);
-                    placedDoor.name = "door_" + dir;
-                    placedDoor.transform.SetParent(instancedRoom.transform);
-                    placedDoor.GetComponent<DoorStats>().dir = dir;
-                    instancedRoomStats.doors.Add(placedDoor);
+                    CreateConnector(dir, connectorPosition, instancedRoom.transform);
+                    CreateDoor(dir, new Vector3(x, y, 0f), instancedRoom.transform, instancedRoomStats);
+
                 }
                 GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity);
                 if (isWall == true)
@@ -119,7 +112,7 @@ public class RoomGenerator : ScriptableObject
 
             for (int i = 0; i < monsterSpawnerAmount; i++)
             {
-                Vector3 monsterPosition = RandomPosition();
+                Vector3 monsterPosition = RandomHelper.RandomPosition(gridPositions);
                 RaycastHit2D hit = Physics2D.Raycast(monsterPosition, Vector2.zero);
                 if (hit.collider != null && hit.collider.gameObject.tag == "Obstacle")
                 {
@@ -140,34 +133,24 @@ public class RoomGenerator : ScriptableObject
         return instancedRoom;
     }
 
-    direction CheckDirection(int x, int y, int middleX, int middleY)
+    void CreateConnector(direction dir, Vector3 position, Transform parent)
     {
-        direction dir = direction.NORTH;
-        if (y > middleX)
-            dir = direction.NORTH;
-        else if (y < middleX)
-            dir = direction.SOUTH;
-        else if (x > middleY)
-            dir = direction.EAST;
-        else if (x < middleY)
-            dir = direction.WEST;
-        return dir;
+        GameObject connector = Instantiate(outsideConnector, position, Quaternion.identity);
+        connector.name = "connector_" + dir;
+        connector.tag = "Connector";
+        connector.transform.SetParent(parent);
+        connector.GetComponent<ConnectorStat>().dir = dir;
     }
 
-    Vector3 RandomPosition()
+    void CreateDoor(direction dir, Vector3 position, Transform parent, roomStats parentStats)
     {
-        //Declare an integer randomIndex, set it's value to a random number between 0 and the count of items in our List gridPositions.
-        int randomIndex = Random.Range(0, gridPositions.Count);
-
-        //Declare a variable of type Vector3 called randomPosition, set it's value to the entry at randomIndex from our List gridPositions.
-        Vector3 randomPosition = gridPositions[randomIndex];
-
-        //Remove the entry at randomIndex from the list so that it can't be re-used.
-        gridPositions.RemoveAt(randomIndex);
-
-        //Return the randomly selected Vector3 position.
-        return randomPosition;
+        GameObject placedDoor = Instantiate(door, position, Quaternion.identity);
+        placedDoor.name = "door_" + dir;
+        placedDoor.transform.SetParent(parent);
+        placedDoor.GetComponent<DoorStats>().dir = dir;
+        parentStats.doors.Add(placedDoor);
     }
+
 }
 
 [System.Flags]
@@ -181,7 +164,7 @@ public enum direction
 
 public enum ObstacleRandomness
 {
-    LOW = 5,
-    MID = 10,
-    HIGH = 15
+    LOW = 1,
+    MID = 3,
+    HIGH = 5
 }

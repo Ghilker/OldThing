@@ -85,6 +85,13 @@ namespace Helper
             }
             return false;
         }
+        public static Vector3 RandomPosition(List<Vector3> positions)
+        {
+            int randomIndex = Random.Range(0, positions.Count);
+            Vector3 randomPosition = positions[randomIndex];
+            positions.RemoveAt(randomIndex);
+            return randomPosition;
+        }
     }
 
     public class DirectionalMovement
@@ -266,15 +273,3 @@ namespace Helper
         }
     }
 }
-/*                 int offset = room.GetComponent<roomStats>().width + 1;
-                if (RandomHelper.randomBoolean(.85f) && DirectionalMovement.CheckRoomInDirection(connectorDir, room.transform.position, offset, roomPositions))
-                {
-                    int currentRoomIndex = roomPositions.IndexOf(room.transform.position);
-                    Debug.Log("Room at " + currentRoomIndex + " " + generatedRooms[currentRoomIndex] + " " + generatedRooms[currentRoomIndex].transform.position);
-                    Vector3 otherRoomCoordinates = DirectionalMovement.GetVectorOffsetInDir(connectorDir, room.transform.position, offset);
-                    int otherRoomIndex = roomPositions.IndexOf(otherRoomCoordinates);
-                    GameObject otherRoom = generatedRooms[otherRoomIndex];
-                    room.GetComponent<roomStats>().Connect(otherRoom);
-                    otherRoom.GetComponent<roomStats>().Connect(room);
-                    continue;
-                } */
