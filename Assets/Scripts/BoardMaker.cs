@@ -16,8 +16,9 @@ public class BoardMaker : MonoBehaviour
     //List of the random empty spots in the grid
     List<Vector3> randomPositions = new List<Vector3>();
 
+    public RoomGenerator[] roomGenerators;
     //Current room generator
-    public RoomGenerator gen;
+    RoomGenerator pickedGenerator;
 
     public GameObject player;
 
@@ -37,7 +38,12 @@ public class BoardMaker : MonoBehaviour
 
     private void Start()
     {
-        gen.roomSize = (int)roomSize;
+        foreach (RoomGenerator gen in roomGenerators)
+        {
+            gen.width = (int)roomSize;
+            gen.height = (int)roomSize;
+        }
+        pickedGenerator = roomGenerators[Random.Range(0, roomGenerators.Length)];
         mainCamera = Camera.main;
         GenerateBoard();
     }
@@ -55,7 +61,7 @@ public class BoardMaker : MonoBehaviour
     {
         //Creation of the first room
         generatedRooms = new List<GameObject>();
-        GameObject firstRoom = gen.GenerateRoom(Vector2.zero, true);
+        GameObject firstRoom = pickedGenerator.GenerateRoom(Vector2.zero, true);
         roomPositions.Add(firstRoom.transform.position);
         firstRoom.transform.SetParent(Board.transform);
         generatedRooms.Add(firstRoom);
@@ -123,14 +129,15 @@ public class BoardMaker : MonoBehaviour
             }
 
             bool isSpecialRoom = false;
-            if (currentSpecialRooms < maxSpecialRooms && RandomHelper.prob(specialRoomRarity))
+            if (currentSpecialRooms < maxSpecialRooms && RandomHelper.prob(specialRoomRarity) && starterRoom.roomDepth == maxRoomDepth - 1)
             {
                 isSpecialRoom = true;
                 currentSpecialRooms++;
             }
 
             roomPositions.Add(newRoomPosition);
-            GameObject otherRoomObj = gen.GenerateRoom(newRoomPosition, false, isSpecialRoom);
+            pickedGenerator = roomGenerators[Random.Range(0, roomGenerators.Length)];
+            GameObject otherRoomObj = pickedGenerator.GenerateRoom(newRoomPosition, false, isSpecialRoom);
             roomStats otherRoomStat = otherRoomObj.GetComponent<roomStats>();
             connector.GetComponent<ConnectorStat>().connected = true;
             starterRoom.Connect(otherRoomObj);
@@ -138,6 +145,7 @@ public class BoardMaker : MonoBehaviour
             starterRoom.connectedDirs |= originalDir;
             otherRoomStat.connectedDirs |= DirectionalMovement.ReverseDirection(originalDir);
             otherRoomStat.roomDepth = starterRoom.roomDepth + 1;
+            otherRoomStat.isActive = true;
             otherRoomObj.transform.SetParent(Board.transform);
             generatedRooms.Add(otherRoomObj);
 
@@ -191,7 +199,7 @@ public class BoardMaker : MonoBehaviour
 
                 direction reverseDir = DirectionalMovement.ReverseDirection(connectorDir);
                 Vector3 wallPosition = DirectionalMovement.MoveTo(reverseDir, connector.transform.position);
-                GameObject wallToGenerate = gen.wallArray[Random.Range(0, gen.wallArray.Length)];
+                GameObject wallToGenerate = pickedGenerator.wallArray[Random.Range(0, pickedGenerator.wallArray.Length)];
 
                 GameObject wall = Instantiate(wallToGenerate, wallPosition, Quaternion.identity);
                 Transform wallHolder = room.transform.GetChild(0);

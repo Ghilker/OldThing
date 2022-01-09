@@ -60,4 +60,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee18c7b60930c4042864c06e130e081e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy: {fileID: 4525261432589092192, guid: e9f55e9fc814fe84d9f2dd7aa6c9e174, type: 3}
+  enemies:
+  - {fileID: 4525261432589092192, guid: e9f55e9fc814fe84d9f2dd7aa6c9e174, type: 3}
+  room: {fileID: 0}

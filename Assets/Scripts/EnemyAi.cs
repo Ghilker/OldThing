@@ -8,16 +8,22 @@ public class EnemyAi : MonoBehaviour
     private GameObject target;
     [SerializeField]
     private float speed;
+    private MonsterStats stats;
 
     // Start is called before the first frame update
     void Start()
     {
+        stats = GetComponent<MonsterStats>();
         target = GameObject.FindGameObjectWithTag("Player");
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!stats.isAlive)
+        {
+            return;
+        }
         FollowPlayer();
     }
 
