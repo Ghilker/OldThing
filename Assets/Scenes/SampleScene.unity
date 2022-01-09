@@ -169,8 +169,12 @@ MonoBehaviour:
   generatedRooms: []
   roomPositions: []
   gen: {fileID: 11400000, guid: 298d89e3049726e4c98ef57097e8a5fe, type: 2}
+  player: {fileID: 5274553093934247594, guid: a0003442fbee1fc4c87df7f5af02eaef, type: 3}
   maxRoomDepth: 5
   roomSize: 6
+  specialRoomRarity: 5
+  maxSpecialRooms: 3
+  currentSpecialRooms: 0
 --- !u!1 &1964189116
 GameObject:
   m_ObjectHideFlags: 0
