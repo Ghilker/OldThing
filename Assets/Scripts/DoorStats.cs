@@ -63,16 +63,8 @@ public class DoorStats : MonoBehaviour
 
     void RoomHide(GameObject oldRoom, GameObject newRoom)
     {
-        List<GameObject> oldChildren = SearchChildren.AllChilds(oldRoom);
-        List<GameObject> newChildren = SearchChildren.AllChilds(newRoom);
-        foreach (GameObject child in oldChildren)
-        {
-            child.layer = 6;
-        }
-        foreach (GameObject child in newChildren)
-        {
-            child.layer = 0;
-        }
+        oldRoom.SetActive(false);
+        newRoom.SetActive(true);
 
     }
 }

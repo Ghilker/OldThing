@@ -20,14 +20,12 @@ public class roomStats : MonoBehaviour
     bool canSpawn = true;
 
 
-    public void Connect(GameObject otherRoom)
+    public void Connect(GameObject otherRoom, direction dir)
     {
         if (neighboorRooms == null)
         {
             neighboorRooms = new Dictionary<direction, GameObject>();
         }
-        direction dir = direction.NORTH;
-        dir = DirectionalMovement.CheckVectorialDirection(roomCoordinates, otherRoom.GetComponent<roomStats>().roomCoordinates);
         neighboorRooms.Add(dir, otherRoom);
         connectedRooms.Add(otherRoom);
         connectedDirections.Add(dir);
