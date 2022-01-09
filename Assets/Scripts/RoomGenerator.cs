@@ -53,7 +53,6 @@ public class RoomGenerator : ScriptableObject
         roomStats instancedRoomStats = instancedRoom.GetComponent<roomStats>();
         instancedRoomStats.width = width;
         instancedRoomStats.height = height;
-        instancedRoomStats.roomCoordinates = roomPosition;
         GameObject wallHolder = new GameObject("wallHolder");
         GameObject floorHolder = new GameObject("floorHolder");
         wallHolder.transform.SetParent(instancedRoom.transform);
@@ -62,6 +61,7 @@ public class RoomGenerator : ScriptableObject
 
         int middleX = Mathf.RoundToInt(width / 2f);
         int middleY = Mathf.RoundToInt(height / 2f);
+        Vector3 middlePoint = new Vector3(middleX, middleY, 0f);
         bool isWall = false;
         for (int x = 0; x <= width; x++)
         {
@@ -76,7 +76,9 @@ public class RoomGenerator : ScriptableObject
                 }
                 if ((x == 0 || x == width || y == 0 || y == height) && (x == middleX || y == middleY))
                 {
-                    direction dir = CheckDirection(x, y, middleX, middleY);
+                    Vector3 currentXY = new Vector3(x, y, 0f);
+
+                    direction dir = DirectionalMovement.CheckVectorialDirection(currentXY, middlePoint);
 
                     Vector3 connectorPosition = DirectionalMovement.GetVectorOffsetInDir(dir, new Vector3(x, y, 0f));
 
