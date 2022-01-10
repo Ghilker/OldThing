@@ -22,6 +22,7 @@ public class BoardMaker : MonoBehaviour
 
     public GameObject player;
     public GameObject testObj;
+    GameObject bossRoom;
 
     //Main holder for all game objects
     GameObject Board;
@@ -74,9 +75,10 @@ public class BoardMaker : MonoBehaviour
         //Adjusting position of the camera to the center of the first room
         Vector3 cameraPosition = new Vector3((firstRoomStats.width + 1) / 2, (firstRoomStats.height + 1) / 2, -10f);
         mainCamera.transform.position = cameraPosition + new Vector3(0.5f, 0.5f, 0f);
+        mainCamera.GetComponent<CameraMovements>().currentRoomWidth = firstRoomStats.width;
+        mainCamera.GetComponent<CameraMovements>().currentRoomHeight = firstRoomStats.height;
         Instantiate(player, new Vector3(middleX, middleY, 0f), Quaternion.identity);
         BranchOut(firstRoom);
-
     }
 
     void BranchOut(GameObject startingRoom)
@@ -253,6 +255,10 @@ public class BoardMaker : MonoBehaviour
             roomStats currentRoomStats = currentRoom.GetComponent<roomStats>();
             if (currentRoomStats.width != currentRoomStats.height)
             {
+                if (!bossRoom)
+                {
+                    bossRoom = currentRoom;
+                }
                 continue;
             }
             Vector3 middlePoint = new Vector3(currentRoomStats.width / 2, currentRoomStats.height / 2, 0f);
@@ -263,6 +269,10 @@ public class BoardMaker : MonoBehaviour
             {
                 GameObject otherDoor = door.GetComponent<DoorStats>().otherDoorObj;
             }
+        }
+        if (bossRoom)
+        {
+            Debug.Log("Hello boss");
         }
     }
 
@@ -278,17 +288,13 @@ public class BoardMaker : MonoBehaviour
                 continue;
             }
             List<Vector3> internalRoomGrid = new List<Vector3>();
-            for (int x = 0; x < currentRoomStats.width; x++)
+            foreach (Vector3 position in currentRoomStats.internalGridPositions)
             {
-                for (int y = 0; y < currentRoomStats.height; y++)
+                if ((position.x == 0 || position.x == currentRoomStats.width || position.y == 0 || position.y == currentRoomStats.height))
                 {
-                    Vector3 currentPosition = new Vector3(x, y, 0f);
-                    if ((x == 0 || x == currentRoomStats.width || y == 0 || y == currentRoomStats.height))
-                    {
-                        continue;
-                    }
-                    internalRoomGrid.Add(currentPosition);
+                    continue;
                 }
+                internalRoomGrid.Add(position);
             }
             RoomGenerator roomGen = currentRoomStats.roomGenerator;
             int randomObstacleAmount = Random.Range(0, (int)roomGen.obstacleRandomness);
@@ -319,10 +325,14 @@ public class BoardMaker : MonoBehaviour
                 continue;
             }
             RoomGenerator roomGen = currentRoomStats.roomGenerator;
-            int randomMonsterAmount = Random.Range(0, currentRoomStats.roomGenerator.maxMonsterSpawnerAmount);
+            int randomMonsterAmount = Random.Range(1, currentRoomStats.roomGenerator.maxMonsterSpawnerAmount);
             int biggerRoomSide = Mathf.Max(currentRoomStats.width, currentRoomStats.height);
             int smallerRoomSide = Mathf.Min(currentRoomStats.width, currentRoomStats.height);
             int monsterMultiplier = biggerRoomSide / smallerRoomSide;
+            if (monsterMultiplier > 1)
+            {
+                randomMonsterAmount += 3;
+            }
             for (int i = 0; i <= randomMonsterAmount * monsterMultiplier; i++)
             {
                 Vector3 randomPosition = RandomHelper.RandomPosition(currentRoomStats.internalGridPositions);

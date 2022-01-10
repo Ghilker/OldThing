@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outsideConnector: {fileID: 3449238360486327238, guid: 5129e1b95b8beb748891282b9da8852e, type: 3}
   roomHolder: {fileID: 2358413167560816232, guid: d49a1d290a674cc4b81fbf8a29731491, type: 3}
-  monsterSpawner: {fileID: 898880750962155432, guid: 251b17e8135799947803ca405041c27a, type: 3}
   floorArray:
   - {fileID: 9062761369987290431, guid: dddb6ef05f4e9174e81614c250f098d9, type: 3}
   - {fileID: 3048998536953405158, guid: a0132abd4ece3dc4cbc27fb5250db3a0, type: 3}
@@ -27,7 +26,7 @@ MonoBehaviour:
   - {fileID: 2490617431158514342, guid: 448b23bf502dcc142a8e8a69e6261c25, type: 3}
   - {fileID: 1083304521653352805, guid: acaf2b5c875c577468c000cc097cfe91, type: 3}
   door: {fileID: 3572056514483179247, guid: 1b0f3985b51c18f47bf95c8963dc49fc, type: 3}
-  width: 10
+  width: 15
   height: 10
-  monsterSpawnerAmount: 5
-  obstacleRandomness: 10
+  maxMonsterSpawnerAmount: 5
+  obstacleRandomness: 3
