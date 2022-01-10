@@ -179,6 +179,7 @@ MonoBehaviour:
   specialRoomRarity: 5
   maxSpecialRooms: 3
   currentSpecialRooms: 0
+  monsterSpawner: {fileID: 898880750962155432, guid: 251b17e8135799947803ca405041c27a, type: 3}
 --- !u!1 &1964189116
 GameObject:
   m_ObjectHideFlags: 0
