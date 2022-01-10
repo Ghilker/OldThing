@@ -39,6 +39,8 @@ public class BoardMaker : MonoBehaviour
 
     List<GameObject> specialRooms = new List<GameObject>();
 
+    public GameObject monsterSpawner;
+
     private void Start()
     {
         pickedGenerator = roomGenerators[Random.Range(0, roomGenerators.Length)];
@@ -129,6 +131,7 @@ public class BoardMaker : MonoBehaviour
             pickedGenerator = roomGenerators[Random.Range(0, roomGenerators.Length)];
             GameObject otherRoomObj = pickedGenerator.GenerateRoom(newRoomPosition);
             roomStats otherRoomStat = otherRoomObj.GetComponent<roomStats>();
+            otherRoomStat.roomGenerator = pickedGenerator;
             List<GameObject> otherConnectors = SearchChildren.SearchForTag(otherRoomObj, "Connector");
             foreach (GameObject connector in otherConnectors)
             {
@@ -267,9 +270,39 @@ public class BoardMaker : MonoBehaviour
     {
         foreach (GameObject room in generatedRooms)
         {
-            if (room.GetComponent<roomStats>().isSpecial == true)
+            GameObject obstacleHolder = new GameObject("obstacleHolder");
+            obstacleHolder.transform.SetParent(room.transform);
+            roomStats currentRoomStats = room.GetComponent<roomStats>();
+            if (currentRoomStats.isSpecial == true)
             {
                 continue;
+            }
+            List<Vector3> internalRoomGrid = new List<Vector3>();
+            for (int x = 0; x < currentRoomStats.width; x++)
+            {
+                for (int y = 0; y < currentRoomStats.height; y++)
+                {
+                    Vector3 currentPosition = new Vector3(x, y, 0f);
+                    if ((x == 0 || x == currentRoomStats.width || y == 0 || y == currentRoomStats.height))
+                    {
+                        continue;
+                    }
+                    internalRoomGrid.Add(currentPosition);
+                }
+            }
+            RoomGenerator roomGen = currentRoomStats.roomGenerator;
+            int randomObstacleAmount = Random.Range(0, (int)roomGen.obstacleRandomness);
+            for (int i = 0; i <= randomObstacleAmount; i++)
+            {
+                Vector3 randomPosition = RandomHelper.RandomPosition(internalRoomGrid);
+                if (randomPosition.x == currentRoomStats.width / 2 || randomPosition.y == currentRoomStats.height / 2)
+                {
+                    i--;
+                    continue;
+                }
+                currentRoomStats.internalGridPositions.Remove(randomPosition);
+                GameObject obstacle = Instantiate(roomGen.obstacleArray[Random.Range(0, roomGen.obstacleArray.Length)], room.transform.position + randomPosition, Quaternion.identity);
+                obstacle.transform.SetParent(obstacleHolder.transform);
             }
         }
     }
@@ -278,9 +311,26 @@ public class BoardMaker : MonoBehaviour
     {
         foreach (GameObject room in generatedRooms)
         {
-            if (room.GetComponent<roomStats>().isSpecial == true)
+            GameObject monsterHolder = new GameObject("monsterHolder");
+            monsterHolder.transform.SetParent(room.transform);
+            roomStats currentRoomStats = room.GetComponent<roomStats>();
+            if (currentRoomStats.isSpecial == true)
             {
                 continue;
+            }
+            RoomGenerator roomGen = currentRoomStats.roomGenerator;
+            int randomMonsterAmount = Random.Range(0, currentRoomStats.roomGenerator.maxMonsterSpawnerAmount);
+            int biggerRoomSide = Mathf.Max(currentRoomStats.width, currentRoomStats.height);
+            int smallerRoomSide = Mathf.Min(currentRoomStats.width, currentRoomStats.height);
+            int monsterMultiplier = biggerRoomSide / smallerRoomSide;
+            for (int i = 0; i <= randomMonsterAmount * monsterMultiplier; i++)
+            {
+                Vector3 randomPosition = RandomHelper.RandomPosition(currentRoomStats.internalGridPositions);
+                currentRoomStats.internalGridPositions.Remove(randomPosition);
+                GameObject monsterSpawnerInstance = Instantiate(monsterSpawner, room.transform.position + randomPosition, Quaternion.identity);
+                monsterSpawnerInstance.transform.SetParent(monsterHolder.transform);
+                monsterSpawnerInstance.GetComponent<MonsterSpawn>().room = currentRoomStats;
+                currentRoomStats.monsterSpawners.Add(monsterSpawnerInstance);
             }
         }
     }

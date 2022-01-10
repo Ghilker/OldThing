@@ -8,7 +8,6 @@ public class RoomGenerator : ScriptableObject
 {
     public GameObject outsideConnector;
     public GameObject roomHolder;
-    public GameObject monsterSpawner;
 
     public GameObject[] floorArray;
     public GameObject[] wallArray;
@@ -20,7 +19,7 @@ public class RoomGenerator : ScriptableObject
     public int width = 8;
     public int height = 8;
 
-    public int monsterSpawnerAmount = 4;
+    public int maxMonsterSpawnerAmount = 4;
     public ObstacleRandomness obstacleRandomness = ObstacleRandomness.LOW;
 
     private List<Vector3> gridPositions = new List<Vector3>();
@@ -79,6 +78,7 @@ public class RoomGenerator : ScriptableObject
 
                 }
                 GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity);
+                instancedRoomStats.roomObjects.Add(instance);
                 if (isWall == true)
                 {
                     instance.transform.SetParent(wallHolder.transform);

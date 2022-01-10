@@ -15,9 +15,12 @@ public class roomStats : MonoBehaviour
     public bool isActive = true;
     public List<GameObject> monsters = new List<GameObject>();
     public List<GameObject> monsterSpawners = new List<GameObject>();
+    public List<GameObject> roomObjects = new List<GameObject>();
     public List<Vector3> internalGridPositions = new List<Vector3>();
+    [SerializeField]
     bool canSpawn = true;
     public bool isSpecial = false;
+    public RoomGenerator roomGenerator;
 
     public void Connect(GameObject otherRoom, direction dir)
     {
