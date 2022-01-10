@@ -10,7 +10,7 @@ public class roomStats : MonoBehaviour
     public Vector2 roomCoordinates;
     public List<GameObject> connectedRooms;
     public List<GameObject> doors;
-    [EnumFlagsAttribute] public direction connectedDirs;
+    public direction connectedDirs;
     public int roomDepth = 0;
     public bool isActive = true;
     public List<GameObject> monsters = new List<GameObject>();
