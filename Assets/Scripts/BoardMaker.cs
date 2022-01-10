@@ -21,6 +21,7 @@ public class BoardMaker : MonoBehaviour
     RoomGenerator pickedGenerator;
 
     public GameObject player;
+    public GameObject testObj;
 
     //Main holder for all game objects
     GameObject Board;
@@ -36,6 +37,8 @@ public class BoardMaker : MonoBehaviour
     //Reference to the camera
     Camera mainCamera;
 
+    List<GameObject> specialRooms = new List<GameObject>();
+
     private void Start()
     {
         pickedGenerator = roomGenerators[Random.Range(0, roomGenerators.Length)];
@@ -49,6 +52,7 @@ public class BoardMaker : MonoBehaviour
         Board = new GameObject("BoardHolder");
         CreateRoom();
         SealDungeon();
+        PopulateDungeon();
         HideDungeon();
     }
 
@@ -56,10 +60,11 @@ public class BoardMaker : MonoBehaviour
     {
         //Creation of the first room
         generatedRooms = new List<GameObject>();
-        GameObject firstRoom = pickedGenerator.GenerateRoom(Vector2.zero, true);
+        GameObject firstRoom = pickedGenerator.GenerateRoom(Vector2.zero);
         firstRoom.transform.SetParent(Board.transform);
         generatedRooms.Add(firstRoom);
         roomStats firstRoomStats = firstRoom.GetComponent<roomStats>();
+        firstRoomStats.isSpecial = true;
         firstRoomStats.roomCoordinates = Vector2.zero;
         roomPositions.Add(firstRoomStats.roomCoordinates);
         int middleX = firstRoomStats.width / 2;
@@ -78,13 +83,17 @@ public class BoardMaker : MonoBehaviour
         List<GameObject> doors = SearchChildren.SearchForTag(startingRoom, "Door");
         roomStats startingRoomStats = startingRoom.GetComponent<roomStats>();
         List<direction> directions = new List<direction>() { direction.NORTH, direction.EAST, direction.SOUTH, direction.WEST };
-        int randomToRemove = Random.Range(0, directions.Count);
-        directions.Remove(directions[randomToRemove]);
+        RandomHelper.ShuffleList(directions);
         if (RandomHelper.prob(25))
         {
-            randomToRemove = Random.Range(0, directions.Count);
+            int randomToRemove = Random.Range(0, directions.Count);
             directions.Remove(directions[randomToRemove]);
-            if (RandomHelper.prob(25) && startingRoomStats.roomDepth > 2)
+        }
+        if (RandomHelper.prob(25) && startingRoomStats.roomDepth > 2)
+        {
+            int randomToRemove = Random.Range(0, directions.Count);
+            directions.Remove(directions[randomToRemove]);
+            if (RandomHelper.prob(5) && startingRoomStats.roomDepth > 4)
             {
                 randomToRemove = Random.Range(0, directions.Count);
                 directions.Remove(directions[randomToRemove]);
@@ -102,21 +111,10 @@ public class BoardMaker : MonoBehaviour
             Vector3 currentPosition = startingRoom.transform.position;
             direction originalDir = dir;
             int currentDepth = startingRoomStats.roomDepth;
-            int xOffset = startingRoomStats.width;
-            int yOffset = startingRoomStats.height;
-            int offset = 1;
-            if (originalDir.HasFlag(direction.NORTH) || originalDir.HasFlag(direction.SOUTH))
-            {
-                offset = yOffset;
-            }
-            else if (originalDir.HasFlag(direction.EAST) || originalDir.HasFlag(direction.WEST))
-            {
-                offset = xOffset;
-            }
 
             Vector3 newRoomPosition = DirectionalMovement.GetVectorOffsetInDir(originalDir, currentPosition, 20);
             Vector2 newRoomPositionGrid = DirectionalMovement.MoveTo(dir, startingRoomStats.roomCoordinates);
-            if (RandomHelper.prob(1) && startingRoomStats.roomDepth > 2)
+            if (RandomHelper.prob(50) && startingRoomStats.roomDepth > 2)
             {
                 randomPositions.Add(newRoomPositionGrid);
                 continue;
@@ -127,16 +125,9 @@ public class BoardMaker : MonoBehaviour
                 continue;
             }
 
-            bool isSpecialRoom = false;
-            if (currentSpecialRooms < maxSpecialRooms && RandomHelper.prob(specialRoomRarity) && startingRoomStats.roomDepth == maxRoomDepth - 1)
-            {
-                isSpecialRoom = true;
-                currentSpecialRooms++;
-            }
-
             roomPositions.Add(newRoomPositionGrid);
             pickedGenerator = roomGenerators[Random.Range(0, roomGenerators.Length)];
-            GameObject otherRoomObj = pickedGenerator.GenerateRoom(newRoomPosition, false, isSpecialRoom);
+            GameObject otherRoomObj = pickedGenerator.GenerateRoom(newRoomPosition);
             roomStats otherRoomStat = otherRoomObj.GetComponent<roomStats>();
             List<GameObject> otherConnectors = SearchChildren.SearchForTag(otherRoomObj, "Connector");
             foreach (GameObject connector in otherConnectors)
@@ -234,11 +225,63 @@ public class BoardMaker : MonoBehaviour
             room.SetActive(false);
         }
     }
-}
-public enum RoomSize
-{
-    SMALL = 6,
-    MEDIUM = 8,
-    BIG = 10,
-    HUGE = 12
+
+    void PopulateDungeon()
+    {
+        CreateSpecialRooms();
+        AddObstacles();
+        AddMonsters();
+    }
+
+    void CreateSpecialRooms()
+    {
+        List<GameObject> selectedRooms = new List<GameObject>();
+        foreach (GameObject room in generatedRooms)
+        {
+            if (room.GetComponent<roomStats>().roomDepth < maxRoomDepth)
+            {
+                continue;
+            }
+            selectedRooms.Add(room);
+        }
+
+        foreach (GameObject currentRoom in selectedRooms)
+        {
+            roomStats currentRoomStats = currentRoom.GetComponent<roomStats>();
+            if (currentRoomStats.width != currentRoomStats.height)
+            {
+                continue;
+            }
+            Vector3 middlePoint = new Vector3(currentRoomStats.width / 2, currentRoomStats.height / 2, 0f);
+            GameObject specialObj = Instantiate(testObj, currentRoom.transform.position + middlePoint, Quaternion.identity);
+            specialObj.transform.SetParent(currentRoom.transform);
+            currentRoomStats.isSpecial = true;
+            foreach (GameObject door in currentRoomStats.doors)
+            {
+                GameObject otherDoor = door.GetComponent<DoorStats>().otherDoorObj;
+            }
+        }
+    }
+
+    void AddObstacles()
+    {
+        foreach (GameObject room in generatedRooms)
+        {
+            if (room.GetComponent<roomStats>().isSpecial == true)
+            {
+                continue;
+            }
+        }
+    }
+
+    void AddMonsters()
+    {
+        foreach (GameObject room in generatedRooms)
+        {
+            if (room.GetComponent<roomStats>().isSpecial == true)
+            {
+                continue;
+            }
+        }
+    }
 }

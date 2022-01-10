@@ -9,26 +9,19 @@ public class roomStats : MonoBehaviour
     public int height;
     public Vector2 roomCoordinates;
     public List<GameObject> connectedRooms;
-    public List<direction> connectedDirections;
-    public Dictionary<direction, GameObject> neighboorRooms;
     public List<GameObject> doors;
     [EnumFlagsAttribute] public direction connectedDirs;
     public int roomDepth = 0;
     public bool isActive = true;
     public List<GameObject> monsters = new List<GameObject>();
     public List<GameObject> monsterSpawners = new List<GameObject>();
+    public List<Vector3> internalGridPositions = new List<Vector3>();
     bool canSpawn = true;
-
+    public bool isSpecial = false;
 
     public void Connect(GameObject otherRoom, direction dir)
     {
-        if (neighboorRooms == null)
-        {
-            neighboorRooms = new Dictionary<direction, GameObject>();
-        }
-        neighboorRooms.Add(dir, otherRoom);
         connectedRooms.Add(otherRoom);
-        connectedDirections.Add(dir);
     }
 
     private void Update()
