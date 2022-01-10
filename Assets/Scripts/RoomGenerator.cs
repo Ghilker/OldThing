@@ -25,26 +25,19 @@ public class RoomGenerator : ScriptableObject
 
     private List<Vector3> gridPositions = new List<Vector3>();
 
-
-    //Clears our list gridPositions and prepares it to generate a new board.
     void InitialiseList()
     {
-        //Clear our list gridPositions.
         gridPositions.Clear();
-
-        //Loop through x axis (columns).
-        for (int x = 1; x < width - 1; x++)
+        for (int x = 0; x < width; x++)
         {
-            //Within each column, loop through y axis (rows).
-            for (int y = 1; y < height - 1; y++)
+            for (int y = 0; y < height; y++)
             {
-                //At each index add a new Vector3 to our list with the x and y coordinates of that position.
                 gridPositions.Add(new Vector3(x, y, 0f));
             }
         }
     }
 
-    public GameObject GenerateRoom(Vector2 roomPosition, bool firstRoom = false, bool specialRoom = false)
+    public GameObject GenerateRoom(Vector2 roomPosition)
     {
         InitialiseList();
         GameObject instancedRoom = Instantiate(roomHolder, Vector3.zero, Quaternion.identity);
@@ -57,7 +50,6 @@ public class RoomGenerator : ScriptableObject
         GameObject floorHolder = new GameObject("floorHolder");
         wallHolder.transform.SetParent(instancedRoom.transform);
         floorHolder.transform.SetParent(instancedRoom.transform);
-        int obstacleNumbers = 0;
 
         int middleX = Mathf.RoundToInt(width / 2f);
         int middleY = Mathf.RoundToInt(height / 2f);
@@ -94,42 +86,13 @@ public class RoomGenerator : ScriptableObject
                 else
                 {
                     instance.transform.SetParent(floorHolder.transform);
-                    if (RandomHelper.prob((int)obstacleRandomness) && (x != middleX && y != middleY) && !firstRoom && !specialRoom)
-                    {
-                        GameObject obstacleToInstantiate = obstacleArray[Random.Range(0, obstacleArray.Length)];
-                        GameObject obstacleInstance = Instantiate(obstacleToInstantiate, new Vector3(x, y, 0f), Quaternion.identity);
-                        obstacleInstance.transform.SetParent(instance.transform);
-                        obstacleNumbers++;
-                    }
                 }
             }
         }
 
-        if (!firstRoom && !specialRoom)
-        {
-            GameObject monsterHolder = new GameObject("monsterHolder");
-            monsterHolder.transform.SetParent(instancedRoom.transform);
-
-            for (int i = 0; i < monsterSpawnerAmount; i++)
-            {
-                Vector3 monsterPosition = RandomHelper.RandomPosition(gridPositions);
-                RaycastHit2D hit = Physics2D.Raycast(monsterPosition, Vector2.zero);
-                if (hit.collider != null && hit.collider.gameObject.tag == "Obstacle")
-                {
-                    i--;
-                    continue;
-                }
-                GameObject monsterSpawn = Instantiate(monsterSpawner, monsterPosition, Quaternion.identity);
-                monsterSpawn.transform.SetParent(monsterHolder.transform);
-                monsterSpawn.GetComponent<MonsterSpawn>().room = instancedRoomStats;
-                monsterSpawn.GetComponent<MonsterSpawn>().canSpawn = true;
-                instancedRoomStats.monsterSpawners.Add(monsterSpawn);
-
-            }
-        }
-        instancedRoom.name = instancedRoom.name + "_" + obstacleNumbers + "-obstacles";
         instancedRoom.transform.localPosition = Vector3.zero;
         instancedRoom.transform.position = roomPosition;
+        instancedRoomStats.internalGridPositions = gridPositions;
         return instancedRoom;
     }
 
@@ -151,20 +114,4 @@ public class RoomGenerator : ScriptableObject
         parentStats.doors.Add(placedDoor);
     }
 
-}
-
-[System.Flags]
-public enum direction
-{
-    NORTH = (1 << 0),
-    SOUTH = (1 << 1),
-    EAST = (1 << 2),
-    WEST = (1 << 3)
-}
-
-public enum ObstacleRandomness
-{
-    LOW = 1,
-    MID = 3,
-    HIGH = 5
 }

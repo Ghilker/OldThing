@@ -92,6 +92,16 @@ namespace Helper
             positions.RemoveAt(randomIndex);
             return randomPosition;
         }
+        public static void ShuffleList<T>(List<T> listToRandomize)
+        {
+            for (int i = 0; i < listToRandomize.Count; i++)
+            {
+                var temp = listToRandomize[i];
+                int randomIndex = Random.Range(i, listToRandomize.Count);
+                listToRandomize[i] = listToRandomize[randomIndex];
+                listToRandomize[randomIndex] = temp;
+            }
+        }
     }
 
     public class DirectionalMovement

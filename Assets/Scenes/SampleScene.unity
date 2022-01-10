@@ -173,6 +173,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dda4a14bfd110a64085a39a280534fa8, type: 2}
   - {fileID: 11400000, guid: 298d89e3049726e4c98ef57097e8a5fe, type: 2}
   player: {fileID: 5274553093934247594, guid: a0003442fbee1fc4c87df7f5af02eaef, type: 3}
+  testObj: {fileID: 7690990573777163318, guid: 235cbd21dc479414d931965fc556177b, type: 3}
   maxRoomDepth: 5
   roomSize: 8
   specialRoomRarity: 5
