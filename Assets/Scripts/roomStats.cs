@@ -10,7 +10,7 @@ public class roomStats : MonoBehaviour
     public Vector2 roomCoordinates;
     public List<GameObject> connectedRooms;
     public List<GameObject> doors;
-    [EnumFlagsAttribute] public direction connectedDirs;
+    public direction connectedDirs;
     public int roomDepth = 0;
     public bool isActive = true;
     public List<GameObject> monsters = new List<GameObject>();
@@ -21,6 +21,8 @@ public class roomStats : MonoBehaviour
     bool canSpawn = true;
     public bool isSpecial = false;
     public RoomGenerator roomGenerator;
+    public int availableSpace = 0;
+    public List<GameObject> obstacles = new List<GameObject>();
 
     public void Connect(GameObject otherRoom, direction dir)
     {

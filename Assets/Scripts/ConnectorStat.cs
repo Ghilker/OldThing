@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class ConnectorStat : MonoBehaviour
 {
-    [EnumFlagsAttribute] public direction dir;
+    public direction dir;
     public bool connected = false;
 }

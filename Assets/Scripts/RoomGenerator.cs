@@ -19,17 +19,14 @@ public class RoomGenerator : ScriptableObject
     public int width = 8;
     public int height = 8;
 
-    public int maxMonsterSpawnerAmount = 4;
-    public ObstacleRandomness obstacleRandomness = ObstacleRandomness.LOW;
-
     private List<Vector3> gridPositions = new List<Vector3>();
 
     void InitialiseList()
     {
         gridPositions.Clear();
-        for (int x = 1; x < width - 1; x++)
+        for (int x = 1; x < width; x++)
         {
-            for (int y = 1; y < height - 1; y++)
+            for (int y = 1; y < height; y++)
             {
                 gridPositions.Add(new Vector3(x, y, 0f));
             }
@@ -93,6 +90,7 @@ public class RoomGenerator : ScriptableObject
         instancedRoom.transform.localPosition = Vector3.zero;
         instancedRoom.transform.position = roomPosition;
         instancedRoomStats.internalGridPositions = gridPositions;
+        instancedRoomStats.availableSpace = gridPositions.Count;
         return instancedRoom;
     }
 

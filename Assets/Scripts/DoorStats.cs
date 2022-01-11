@@ -61,12 +61,39 @@ public class DoorStats : MonoBehaviour
         Camera.main.transform.position = connectingRoom.transform.position + cameraPosition + new Vector3(0.5f, 0.5f, 0f);
         Camera.main.GetComponent<CameraMovements>().currentRoomWidth = connectingRoom.GetComponent<roomStats>().width;
         Camera.main.GetComponent<CameraMovements>().currentRoomHeight = connectingRoom.GetComponent<roomStats>().height;
+        Camera.main.GetComponent<CameraMovements>().currentRoomCoordinates = connectingRoom.transform.position;
     }
 
     void RoomHide(GameObject oldRoom, GameObject newRoom)
     {
-        oldRoom.SetActive(false);
+        //oldRoom.SetActive(false);
+        List<GameObject> oldObjects = SearchChildren.AllChilds(oldRoom);
+        foreach (GameObject oldObject in oldObjects)
+        {
+            if (!oldObject.GetComponent<SpriteRenderer>())
+            {
+                continue;
+            }
+            Color color = oldObject.GetComponent<SpriteRenderer>().color;
+            color.r = 0.5f;
+            color.g = 0.5f;
+            color.b = 0.5f;
+            oldObject.GetComponent<SpriteRenderer>().color = color;
+        }
         newRoom.SetActive(true);
+        List<GameObject> newObjects = SearchChildren.AllChilds(newRoom);
+        foreach (GameObject newObject in newObjects)
+        {
+            if (!newObject.GetComponent<SpriteRenderer>())
+            {
+                continue;
+            }
+            Color color = newObject.GetComponent<SpriteRenderer>().color;
+            color.r = 1f;
+            color.g = 1f;
+            color.b = 1f;
+            newObject.GetComponent<SpriteRenderer>().color = color;
+        }
 
     }
 }

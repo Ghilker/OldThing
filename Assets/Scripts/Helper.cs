@@ -87,9 +87,13 @@ namespace Helper
         }
         public static Vector3 RandomPosition(List<Vector3> positions)
         {
+            if (positions.Count < 1)
+            {
+                Debug.LogError("List count less than 1");
+                return Vector3.zero;
+            }
             int randomIndex = Random.Range(0, positions.Count);
             Vector3 randomPosition = positions[randomIndex];
-            positions.RemoveAt(randomIndex);
             return randomPosition;
         }
         public static void ShuffleList<T>(List<T> listToRandomize)
