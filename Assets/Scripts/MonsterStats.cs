@@ -13,7 +13,7 @@ public class MonsterStats : MonoBehaviour
         {
             Debug.Log("HIT");
             isAlive = false;
-            GetComponent<CircleCollider2D>().enabled = false;
+            Destroy(gameObject);
         }
     }
 

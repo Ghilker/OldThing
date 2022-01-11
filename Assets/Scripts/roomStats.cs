@@ -40,6 +40,10 @@ public class roomStats : MonoBehaviour
         }
         foreach (GameObject monster in monsters)
         {
+            if (monster == null)
+            {
+                continue;
+            }
             if (monster.GetComponent<MonsterStats>().isAlive)
             {
                 shouldDeactivate = false;

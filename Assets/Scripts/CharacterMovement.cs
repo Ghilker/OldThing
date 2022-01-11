@@ -10,7 +10,7 @@ public class CharacterMovement : MonoBehaviour
     public bool teleporting = false;
     Vector3 movement;
     private float lastStep = 0;
-    private float waitTime = 1f;
+    private float waitTime = .5f;
     private Rigidbody2D rb2D;
     private float inverseMoveTime = 10f;
 
@@ -20,16 +20,15 @@ public class CharacterMovement : MonoBehaviour
         {
             movement.x = Input.GetAxisRaw("Horizontal");
             movement.y = Input.GetAxisRaw("Vertical");
-            if (movement.x > 0)
+            if (movement.x != 0)
             {
                 movement.y = 0;
             }
             if (AttemptMove(transform.position + Vector3.one * 0.5f, (transform.position + Vector3.one * 0.5f) + movement))
             {
                 transform.position += movement;
-                lastStep = Time.time + waitTime;
             }
-
+            lastStep = Time.time + waitTime;
         }
     }
 

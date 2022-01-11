@@ -290,10 +290,6 @@ public class BoardMaker : MonoBehaviour
                 GameObject otherDoor = door.GetComponent<DoorStats>().otherDoorObj;
             }
         }
-        if (bossRoom)
-        {
-            Debug.Log("Hello boss");
-        }
     }
 
     void AddObstacles()
