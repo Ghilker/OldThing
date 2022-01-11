@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Helper;
+using static Helper.DirectionalMovement;
 
 public class BoardMaker : MonoBehaviour
 {
@@ -77,6 +78,7 @@ public class BoardMaker : MonoBehaviour
         mainCamera.transform.position = cameraPosition + new Vector3(0.5f, 0.5f, 0f);
         mainCamera.GetComponent<CameraMovements>().currentRoomWidth = firstRoomStats.width;
         mainCamera.GetComponent<CameraMovements>().currentRoomHeight = firstRoomStats.height;
+        mainCamera.GetComponent<CameraMovements>().currentRoomCoordinates = firstRoom.transform.position;
         Instantiate(player, new Vector3(middleX, middleY, 0f), Quaternion.identity);
         BranchOut(firstRoom);
     }
@@ -298,7 +300,7 @@ public class BoardMaker : MonoBehaviour
             }
             RoomGenerator roomGen = currentRoomStats.roomGenerator;
             int randomObstacleAmount = Random.Range(0, (int)roomGen.obstacleRandomness);
-            for (int i = 0; i <= randomObstacleAmount; i++)
+            for (int i = 0; i <= randomObstacleAmount + 3; i++)
             {
                 Vector3 randomPosition = RandomHelper.RandomPosition(internalRoomGrid);
                 if (randomPosition.x == currentRoomStats.width / 2 || randomPosition.y == currentRoomStats.height / 2)
@@ -306,7 +308,6 @@ public class BoardMaker : MonoBehaviour
                     i--;
                     continue;
                 }
-                currentRoomStats.internalGridPositions.Remove(randomPosition);
                 GameObject obstacle = Instantiate(roomGen.obstacleArray[Random.Range(0, roomGen.obstacleArray.Length)], room.transform.position + randomPosition, Quaternion.identity);
                 obstacle.transform.SetParent(obstacleHolder.transform);
             }
@@ -320,6 +321,19 @@ public class BoardMaker : MonoBehaviour
             GameObject monsterHolder = new GameObject("monsterHolder");
             monsterHolder.transform.SetParent(room.transform);
             roomStats currentRoomStats = room.GetComponent<roomStats>();
+
+            List<Vector3> nearDoorPositions = new List<Vector3>();
+            foreach (GameObject door in currentRoomStats.doors)
+            {
+                for (int x = -3; x <= 3; x++)
+                {
+                    for (int y = -3; y <= 3; y++)
+                    {
+                        Vector3 nearDoorPosition = door.transform.position + new Vector3(x, y, 0f);
+                        nearDoorPositions.Add(nearDoorPosition);
+                    }
+                }
+            }
             if (currentRoomStats.isSpecial == true)
             {
                 continue;
@@ -329,6 +343,7 @@ public class BoardMaker : MonoBehaviour
             int biggerRoomSide = Mathf.Max(currentRoomStats.width, currentRoomStats.height);
             int smallerRoomSide = Mathf.Min(currentRoomStats.width, currentRoomStats.height);
             int monsterMultiplier = biggerRoomSide / smallerRoomSide;
+            Debug.Log(monsterMultiplier);
             if (monsterMultiplier > 1)
             {
                 randomMonsterAmount += 3;
@@ -336,7 +351,11 @@ public class BoardMaker : MonoBehaviour
             for (int i = 0; i <= randomMonsterAmount * monsterMultiplier; i++)
             {
                 Vector3 randomPosition = RandomHelper.RandomPosition(currentRoomStats.internalGridPositions);
-                currentRoomStats.internalGridPositions.Remove(randomPosition);
+                if (nearDoorPositions.Contains(randomPosition + room.transform.position))
+                {
+                    i--;
+                    continue;
+                }
                 GameObject monsterSpawnerInstance = Instantiate(monsterSpawner, room.transform.position + randomPosition, Quaternion.identity);
                 monsterSpawnerInstance.transform.SetParent(monsterHolder.transform);
                 monsterSpawnerInstance.GetComponent<MonsterSpawn>().room = currentRoomStats;
