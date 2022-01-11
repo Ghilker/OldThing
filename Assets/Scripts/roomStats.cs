@@ -21,6 +21,8 @@ public class roomStats : MonoBehaviour
     bool canSpawn = true;
     public bool isSpecial = false;
     public RoomGenerator roomGenerator;
+    public int availableSpace = 0;
+    public List<GameObject> obstacles = new List<GameObject>();
 
     public void Connect(GameObject otherRoom, direction dir)
     {

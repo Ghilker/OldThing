@@ -29,12 +29,10 @@ public class BoardMaker : MonoBehaviour
     GameObject Board;
     //Max dept that the rooms can reach
     public int maxRoomDepth = 4;
-    //Size of the rooms
-    public RoomSize roomSize;
 
-    public int specialRoomRarity = 5;
+    public int specialRoomRarity = 25;
     public int maxSpecialRooms = 3;
-    public int currentSpecialRooms = 0;
+    int currentSpecialRooms = 0;
 
     //Reference to the camera
     Camera mainCamera;
@@ -118,7 +116,7 @@ public class BoardMaker : MonoBehaviour
             direction originalDir = dir;
             int currentDepth = startingRoomStats.roomDepth;
 
-            Vector3 newRoomPosition = DirectionalMovement.GetVectorOffsetInDir(originalDir, currentPosition, 20);
+            Vector3 newRoomPosition = DirectionalMovement.GetVectorOffsetInDir(originalDir, currentPosition, 5);
             Vector2 newRoomPositionGrid = DirectionalMovement.MoveTo(dir, startingRoomStats.roomCoordinates);
             if (RandomHelper.prob(50) && startingRoomStats.roomDepth > 2)
             {
@@ -251,18 +249,34 @@ public class BoardMaker : MonoBehaviour
             }
             selectedRooms.Add(room);
         }
+        RunSpecialSelection(selectedRooms);
 
+        if (bossRoom)
+        {
+            Debug.Log("Hello boss");
+        }
+        else
+        {
+            Debug.Log("Oh no");
+            CreateSpecialRooms();
+        }
+    }
+
+    void RunSpecialSelection(List<GameObject> selectedRooms)
+    {
         foreach (GameObject currentRoom in selectedRooms)
         {
             roomStats currentRoomStats = currentRoom.GetComponent<roomStats>();
-            if (currentRoomStats.width != currentRoomStats.height)
+            if (!RandomHelper.prob(specialRoomRarity) || currentSpecialRooms >= maxSpecialRooms)
             {
-                if (!bossRoom)
-                {
-                    bossRoom = currentRoom;
-                }
                 continue;
             }
+            if (!bossRoom)
+            {
+                bossRoom = currentRoom;
+            }
+            specialRooms.Add(currentRoom);
+            currentSpecialRooms++;
             Vector3 middlePoint = new Vector3(currentRoomStats.width / 2, currentRoomStats.height / 2, 0f);
             GameObject specialObj = Instantiate(testObj, currentRoom.transform.position + middlePoint, Quaternion.identity);
             specialObj.transform.SetParent(currentRoom.transform);
@@ -271,10 +285,6 @@ public class BoardMaker : MonoBehaviour
             {
                 GameObject otherDoor = door.GetComponent<DoorStats>().otherDoorObj;
             }
-        }
-        if (bossRoom)
-        {
-            Debug.Log("Hello boss");
         }
     }
 
@@ -292,24 +302,22 @@ public class BoardMaker : MonoBehaviour
             List<Vector3> internalRoomGrid = new List<Vector3>();
             foreach (Vector3 position in currentRoomStats.internalGridPositions)
             {
-                if ((position.x == 0 || position.x == currentRoomStats.width || position.y == 0 || position.y == currentRoomStats.height))
-                {
-                    continue;
-                }
-                internalRoomGrid.Add(position);
+                internalRoomGrid.Add(room.transform.position + position);
+            }
+            foreach (GameObject door in currentRoomStats.doors)
+            {
+                Vector3 nearDoor = MoveTo(ReverseDirection(door.GetComponent<DoorStats>().dir), door.transform.position);
+                internalRoomGrid.Remove(nearDoor);
+                currentRoomStats.availableSpace--;
             }
             RoomGenerator roomGen = currentRoomStats.roomGenerator;
-            int randomObstacleAmount = Random.Range(0, (int)roomGen.obstacleRandomness);
-            for (int i = 0; i <= randomObstacleAmount + 3; i++)
+            int randomObstacleAmount = Random.Range(1, 3);
+            for (int i = 0; i < randomObstacleAmount; i++)
             {
                 Vector3 randomPosition = RandomHelper.RandomPosition(internalRoomGrid);
-                if (randomPosition.x == currentRoomStats.width / 2 || randomPosition.y == currentRoomStats.height / 2)
-                {
-                    i--;
-                    continue;
-                }
-                GameObject obstacle = Instantiate(roomGen.obstacleArray[Random.Range(0, roomGen.obstacleArray.Length)], room.transform.position + randomPosition, Quaternion.identity);
+                GameObject obstacle = Instantiate(roomGen.obstacleArray[Random.Range(0, roomGen.obstacleArray.Length)], randomPosition, Quaternion.identity);
                 obstacle.transform.SetParent(obstacleHolder.transform);
+                currentRoomStats.obstacles.Add(obstacle);
             }
         }
     }
@@ -321,42 +329,35 @@ public class BoardMaker : MonoBehaviour
             GameObject monsterHolder = new GameObject("monsterHolder");
             monsterHolder.transform.SetParent(room.transform);
             roomStats currentRoomStats = room.GetComponent<roomStats>();
-
-            List<Vector3> nearDoorPositions = new List<Vector3>();
-            foreach (GameObject door in currentRoomStats.doors)
-            {
-                for (int x = -3; x <= 3; x++)
-                {
-                    for (int y = -3; y <= 3; y++)
-                    {
-                        Vector3 nearDoorPosition = door.transform.position + new Vector3(x, y, 0f);
-                        nearDoorPositions.Add(nearDoorPosition);
-                    }
-                }
-            }
             if (currentRoomStats.isSpecial == true)
             {
                 continue;
             }
-            RoomGenerator roomGen = currentRoomStats.roomGenerator;
-            int randomMonsterAmount = Random.Range(1, currentRoomStats.roomGenerator.maxMonsterSpawnerAmount);
-            int biggerRoomSide = Mathf.Max(currentRoomStats.width, currentRoomStats.height);
-            int smallerRoomSide = Mathf.Min(currentRoomStats.width, currentRoomStats.height);
-            int monsterMultiplier = biggerRoomSide / smallerRoomSide;
-            Debug.Log(monsterMultiplier);
-            if (monsterMultiplier > 1)
+
+            List<Vector3> internalRoomGrid = new List<Vector3>();
+            foreach (Vector3 position in currentRoomStats.internalGridPositions)
             {
-                randomMonsterAmount += 3;
+                internalRoomGrid.Add(room.transform.position + position);
             }
-            for (int i = 0; i <= randomMonsterAmount * monsterMultiplier; i++)
+            foreach (GameObject door in currentRoomStats.doors)
             {
-                Vector3 randomPosition = RandomHelper.RandomPosition(currentRoomStats.internalGridPositions);
-                if (nearDoorPositions.Contains(randomPosition + room.transform.position))
-                {
-                    i--;
-                    continue;
-                }
-                GameObject monsterSpawnerInstance = Instantiate(monsterSpawner, room.transform.position + randomPosition, Quaternion.identity);
+                Vector3 nearDoor = MoveTo(ReverseDirection(door.GetComponent<DoorStats>().dir), door.transform.position);
+                internalRoomGrid.Remove(nearDoor);
+                currentRoomStats.internalGridPositions.Remove(nearDoor);
+                currentRoomStats.availableSpace--;
+            }
+            foreach (GameObject obstacle in currentRoomStats.obstacles)
+            {
+                internalRoomGrid.Remove(obstacle.transform.position);
+                currentRoomStats.availableSpace--;
+            }
+
+            RoomGenerator roomGen = currentRoomStats.roomGenerator;
+            int randomMonsterAmount = Mathf.Max(0, Random.Range(0, (currentRoomStats.availableSpace + 1) / 2));
+            for (int i = 0; i <= randomMonsterAmount; i++)
+            {
+                Vector3 randomPosition = RandomHelper.RandomPosition(internalRoomGrid);
+                GameObject monsterSpawnerInstance = Instantiate(monsterSpawner, randomPosition, Quaternion.identity);
                 monsterSpawnerInstance.transform.SetParent(monsterHolder.transform);
                 monsterSpawnerInstance.GetComponent<MonsterSpawn>().room = currentRoomStats;
                 currentRoomStats.monsterSpawners.Add(monsterSpawnerInstance);
