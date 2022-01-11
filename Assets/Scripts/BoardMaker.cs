@@ -41,7 +41,7 @@ public class BoardMaker : MonoBehaviour
 
     public GameObject monsterSpawner;
 
-    private void Start()
+    public void BoardInit()
     {
         pickedGenerator = roomGenerators[Random.Range(0, roomGenerators.Length)];
         mainCamera = Camera.main;
