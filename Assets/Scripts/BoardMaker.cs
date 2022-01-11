@@ -269,6 +269,10 @@ public class BoardMaker : MonoBehaviour
             roomStats currentRoomStats = currentRoom.GetComponent<roomStats>();
             if (!RandomHelper.prob(specialRoomRarity) || currentSpecialRooms >= maxSpecialRooms)
             {
+                if (!bossRoom)
+                {
+                    bossRoom = currentRoom;
+                }
                 continue;
             }
             if (!bossRoom)
@@ -285,6 +289,10 @@ public class BoardMaker : MonoBehaviour
             {
                 GameObject otherDoor = door.GetComponent<DoorStats>().otherDoorObj;
             }
+        }
+        if (bossRoom)
+        {
+            Debug.Log("Hello boss");
         }
     }
 
