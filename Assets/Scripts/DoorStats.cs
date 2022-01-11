@@ -59,6 +59,8 @@ public class DoorStats : MonoBehaviour
     {
         Vector3 cameraPosition = new Vector3((connectingRoom.GetComponent<roomStats>().width + 1) / 2, (connectingRoom.GetComponent<roomStats>().height + 1) / 2, -10f);
         Camera.main.transform.position = connectingRoom.transform.position + cameraPosition + new Vector3(0.5f, 0.5f, 0f);
+        Camera.main.GetComponent<CameraMovements>().currentRoomWidth = connectingRoom.GetComponent<roomStats>().width;
+        Camera.main.GetComponent<CameraMovements>().currentRoomHeight = connectingRoom.GetComponent<roomStats>().height;
     }
 
     void RoomHide(GameObject oldRoom, GameObject newRoom)

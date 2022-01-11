@@ -27,9 +27,9 @@ public class RoomGenerator : ScriptableObject
     void InitialiseList()
     {
         gridPositions.Clear();
-        for (int x = 0; x < width; x++)
+        for (int x = 1; x < width - 1; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 1; y < height - 1; y++)
             {
                 gridPositions.Add(new Vector3(x, y, 0f));
             }
