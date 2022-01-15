@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -8,7 +9,7 @@ using UnityEditor;
 [ExecuteInEditMode]
 public class ClickSpawn : MonoBehaviour
 {
-    public GameObject toInstantiate;
+    public List<GameObject> toInstantiate;
     private void OnEnable()
     {
         if (!Application.isEditor)
@@ -28,7 +29,7 @@ public class ClickSpawn : MonoBehaviour
             Vector3 worldPosition = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition).origin;
             worldPosition.z = 0;
             Vector3Int worldPositionInt = Vector3Int.FloorToInt(worldPosition);
-            Instantiate(toInstantiate, worldPositionInt, Quaternion.identity);
+            GameObject created = Instantiate(toInstantiate[0], worldPositionInt, Quaternion.identity);
             e.Use();
         }
     }

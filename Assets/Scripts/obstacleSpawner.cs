@@ -5,6 +5,7 @@ using UnityEngine;
 public class obstacleSpawner : MonoBehaviour
 {
     public List<GameObject> rockObstacles;
+    public bool square = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,8 +17,18 @@ public class obstacleSpawner : MonoBehaviour
     }
     void OnDrawGizmos()
     {
-        // Draw a yellow sphere at the transform's position
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position + new Vector3(.5f, .5f, 0f), 0.5f);
+
+        if (!square)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position + new Vector3(.5f, .5f, 0f), 0.5f);
+        }
+        else
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireCube(transform.position + new Vector3(.5f, .5f, 0f), Vector3.one);
+        }
+
+
     }
 }
