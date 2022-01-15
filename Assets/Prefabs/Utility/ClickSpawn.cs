@@ -29,7 +29,7 @@ public class ClickSpawn : MonoBehaviour
             Vector3 worldPosition = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition).origin;
             worldPosition.z = 0;
             Vector3Int worldPositionInt = Vector3Int.FloorToInt(worldPosition);
-            GameObject created = Instantiate(toInstantiate[0], worldPositionInt, Quaternion.identity);
+            Instantiate(toInstantiate[0], worldPositionInt, Quaternion.identity);
             e.Use();
         }
     }

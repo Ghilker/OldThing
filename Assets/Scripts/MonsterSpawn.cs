@@ -15,6 +15,7 @@ public class MonsterSpawn : MonoBehaviour
         room.monsters.Add(instantiatedEnemy);
         instantiatedEnemy.transform.SetParent(transform);
         canSpawn = false;
+
     }
 
 }

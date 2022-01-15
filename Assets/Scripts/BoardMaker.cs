@@ -18,8 +18,11 @@ public class BoardMaker : MonoBehaviour
     List<Vector2> randomPositions = new List<Vector2>();
 
     public GameObject[] emptyRoomsArrayHigh;
+    private List<GameObject> emptyRoomsListHigh = new List<GameObject>();
     public GameObject[] emptyRoomsArrayMid;
+    private List<GameObject> emptyRoomsListMid = new List<GameObject>();
     public GameObject[] emptyRoomsArrayLow;
+    private List<GameObject> emptyRoomsListLow = new List<GameObject>();
     public GameObject intialRoom;
 
     public GameObject player;
@@ -49,6 +52,9 @@ public class BoardMaker : MonoBehaviour
     {
         //Create board holder
         Board = new GameObject("BoardHolder");
+        emptyRoomsListHigh.AddRange(emptyRoomsArrayHigh);
+        emptyRoomsListMid.AddRange(emptyRoomsArrayMid);
+        emptyRoomsListLow.AddRange(emptyRoomsArrayLow);
         CreateRoom();
         SealDungeon();
         //PopulateDungeon();
@@ -179,13 +185,16 @@ public class BoardMaker : MonoBehaviour
         switch (arrayToPick)
         {
             case (0):
-                pickedRoom = emptyRoomsArrayHigh[Random.Range(0, emptyRoomsArrayHigh.Length)];
+                pickedRoom = emptyRoomsListHigh[Random.Range(0, emptyRoomsListHigh.Count)];
+                RandomHelper.ShuffleList(emptyRoomsListHigh);
                 break;
             case (1):
-                pickedRoom = emptyRoomsArrayMid[Random.Range(0, emptyRoomsArrayMid.Length)];
+                pickedRoom = emptyRoomsListMid[Random.Range(0, emptyRoomsListMid.Count)];
+                RandomHelper.ShuffleList(emptyRoomsListMid);
                 break;
             case (2):
-                pickedRoom = emptyRoomsArrayLow[Random.Range(0, emptyRoomsArrayLow.Length)];
+                pickedRoom = emptyRoomsListLow[Random.Range(0, emptyRoomsListLow.Count)];
+                RandomHelper.ShuffleList(emptyRoomsListLow);
                 break;
         }
 
