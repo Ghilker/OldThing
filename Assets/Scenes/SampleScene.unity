@@ -152,9 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 327efd6df5704854c8bf086f317ff931, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  toInstantiate:
-  - {fileID: 7204486041576264319, guid: aa313e9278c432648bd99c5aaf185dac, type: 3}
-  - {fileID: 6315827365712263837, guid: 4cd1457e3c27cfe4d9396ebd0d6210d9, type: 3}
+  toInstantiate: {fileID: 898880750962155432, guid: 251b17e8135799947803ca405041c27a, type: 3}
 --- !u!4 &877656876
 Transform:
   m_ObjectHideFlags: 0
@@ -199,7 +197,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardMaker: {fileID: 1917300986}
-  dungeonDepth: 4
+  dungeonDepth: 6
 --- !u!4 &1529335530
 Transform:
   m_ObjectHideFlags: 0
@@ -260,19 +258,42 @@ MonoBehaviour:
   generatedRooms: []
   roomGridPositions: []
   emptyRoomsArrayHigh:
+  - {fileID: 7118084941167184486, guid: b229fb826f5e2694aacf64ca7d2a81e4, type: 3}
+  - {fileID: 628559548622463357, guid: b16bac7a196c55b4989e7dd70b7196b7, type: 3}
+  - {fileID: 3441840740056854905, guid: 87c52702592db8044a3d9c953ba39898, type: 3}
   - {fileID: 1872757157228876745, guid: 8dba556870e8dba4cacab22fa773955b, type: 3}
+  - {fileID: 2356795816509401966, guid: 663c8d189ca0bbe4e89d025a1faf5083, type: 3}
+  - {fileID: 5619890796026692326, guid: a4899d98116faf5478f508a24a1acee2, type: 3}
+  - {fileID: 3307979920281340601, guid: f0eea90f95dcd0c4484de74af0abd761, type: 3}
   - {fileID: 7924290958517077817, guid: 6dcdecfb81e16414a9017c766e147b65, type: 3}
+  - {fileID: 7717763070019023798, guid: 2a5bef18feb1e9c4e88ecaf80971ed78, type: 3}
   - {fileID: 1401194319524938326, guid: 0b59510abb94c9149bfe3313da061eb3, type: 3}
+  - {fileID: 8334239616675008535, guid: ce330b97893dcdc478b56fc3f3f355a5, type: 3}
   - {fileID: 2452493768348560993, guid: 3ddcb7f6b6c5cdb4d810c0bb40356d38, type: 3}
+  - {fileID: 399589442107272127, guid: 04b29e6159d268b43b3148eaee8b87cf, type: 3}
   - {fileID: 7918378783801725350, guid: d84e9adc07dd06047853204087564cbf, type: 3}
+  - {fileID: 5850510679911356978, guid: f998077b1141c954b9f81e086977d182, type: 3}
   - {fileID: 3248995767334993970, guid: accf75c647ae222449a3f3658b163ca6, type: 3}
+  - {fileID: 3248995767334993970, guid: accf75c647ae222449a3f3658b163ca6, type: 3}
+  - {fileID: 6114366487492887692, guid: 62a0f8c881acde74c9f049cd05e7ed81, type: 3}
   - {fileID: 2293555038616844470, guid: 93641677c35cac742a72480aae5d2eba, type: 3}
+  - {fileID: 2293555038616844470, guid: 93641677c35cac742a72480aae5d2eba, type: 3}
+  - {fileID: 7336232244255427494, guid: d036db1c7b285784ca078befe887c403, type: 3}
+  - {fileID: 1783453483864135182, guid: ff1176e1a5b83594c9c03f894aadca99, type: 3}
   - {fileID: 1783453483864135182, guid: ff1176e1a5b83594c9c03f894aadca99, type: 3}
   - {fileID: 3949957889576700530, guid: 840d21d3eb6d025449f7726d8874c92f, type: 3}
+  - {fileID: 2597226646755333945, guid: b3fdc63c56713a7429dc2eced4dc73ee, type: 3}
   - {fileID: 197816984350275764, guid: 71434eb6ad76a0f449d3fab23a0351ab, type: 3}
+  - {fileID: 8826589960667664362, guid: 25c9b0584d024294faf3b5e7356d1652, type: 3}
+  - {fileID: 8921488711000577420, guid: f6356d7d174bc9f4a9320b61ada055c4, type: 3}
   - {fileID: 1440868679995722858, guid: 03fab3d3b22c90e4d9091a0878119464, type: 3}
+  - {fileID: 8111408792858522823, guid: fe5652d8348162e418300e395a778fc5, type: 3}
   - {fileID: 9154272170313509425, guid: 5aebb093f6d694c4491a773e5b3c50a0, type: 3}
+  - {fileID: 3794933550510048499, guid: 436c103c230eba3469af55cba4a49e31, type: 3}
   - {fileID: 7870552682330774678, guid: 603a498df1d320a489b07416bbe1b9a6, type: 3}
+  - {fileID: 2647684737168740077, guid: 918dea68e4ba8f04689ffe4443d13413, type: 3}
+  - {fileID: 3269543353146373183, guid: 97742fe2609da3243b576c02e0af4f77, type: 3}
+  - {fileID: 189165475996232568, guid: 702ed1b826b5e2441ba7f960a2cceb0d, type: 3}
   - {fileID: 4694803672124563632, guid: df8df501078eaad47b19c3bd23454163, type: 3}
   emptyRoomsArrayMid:
   - {fileID: 2733099624967323832, guid: 848f5a35a18645944833cde5f5680de3, type: 3}
