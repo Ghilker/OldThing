@@ -67,11 +67,6 @@ public class BoardMaker : MonoBehaviour
         firstRoomStats.isActive = true;
         int middleX = firstRoomStats.width / 2;
         int middleY = firstRoomStats.height / 2;
-        //Adjusting position of the camera to the center of the first room
-        Vector3 cameraPosition = new Vector3((firstRoomStats.width + 1) / 2, (firstRoomStats.height + 1) / 2, -10f);
-        mainCamera.transform.position = cameraPosition + new Vector3(0.5f, 0.5f, 0f);
-        mainCamera.GetComponent<CameraMovements>().currentRoomWidth = firstRoomStats.width;
-        mainCamera.GetComponent<CameraMovements>().currentRoomHeight = firstRoomStats.height;
         Instantiate(player, new Vector3(middleX, middleY, 0f), Quaternion.identity);
         foreach (Vector2 newRoomLocalGridPosition in firstRoomStats.internalGrid)
         {
@@ -109,6 +104,8 @@ public class BoardMaker : MonoBehaviour
             instantiatedRoomStats.roomDepth = oldRoomStats.roomDepth + 1;
             instantiatedRoomStats.isActive = true;
             instantiatedRoom.transform.SetParent(Board.transform);
+            List<GameObject> instantiatedRoomDoors = SearchChildren.SearchForTag(instantiatedRoom, "Door");
+            instantiatedRoomStats.doors = instantiatedRoomDoors;
             foreach (Vector2 newRoomLocalGridPosition in instantiatedRoomStats.internalGrid)
             {
                 Vector2 worldGridPosition = newRoomLocalGridPosition + newRoomPositionGrid;
@@ -215,6 +212,7 @@ public class BoardMaker : MonoBehaviour
                 {
                     GameObject closingWall = Instantiate(closingWallObj, currentDoor.transform.position, Quaternion.identity);
                     closingWall.transform.SetParent(currentRoom.transform.GetChild(0));
+                    currentRoom.GetComponent<roomStats>().doors.Remove(currentDoor);
                     Destroy(currentDoor);
                 }
             }

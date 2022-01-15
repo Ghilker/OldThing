@@ -41,7 +41,7 @@ public class DoorStats : MonoBehaviour
             Vector3 playerPosition = DirectionalMovement.MoveTo(dir, otherDoorObj.transform.position);
             other.gameObject.transform.position = playerPosition;
             other.GetComponent<CharacterMovement>().enabled = true;
-            UpdateCamera();
+            //UpdateCamera();
             RoomHide(otherDoorObj.GetComponent<DoorStats>().connectingRoom, connectingRoom);
         }
     }
@@ -50,9 +50,6 @@ public class DoorStats : MonoBehaviour
     {
         Vector3 cameraPosition = new Vector3((connectingRoom.GetComponent<roomStats>().width + 1) / 2, (connectingRoom.GetComponent<roomStats>().height + 1) / 2, -10f);
         Camera.main.transform.position = connectingRoom.transform.position + cameraPosition + new Vector3(0.5f, 0.5f, 0f);
-        Camera.main.GetComponent<CameraMovements>().currentRoomWidth = connectingRoom.GetComponent<roomStats>().width;
-        Camera.main.GetComponent<CameraMovements>().currentRoomHeight = connectingRoom.GetComponent<roomStats>().height;
-        Camera.main.GetComponent<CameraMovements>().currentRoomCoordinates = connectingRoom.transform.position;
     }
 
     void RoomHide(GameObject oldRoom, GameObject newRoom)

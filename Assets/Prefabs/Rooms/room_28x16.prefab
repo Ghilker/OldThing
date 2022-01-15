@@ -31064,7 +31064,6 @@ MonoBehaviour:
   monsterSpawners: []
   canSpawn: 0
   isSpecial: 1
-  branched: 0
 --- !u!1 &6736165976025038502
 GameObject:
   m_ObjectHideFlags: 0
