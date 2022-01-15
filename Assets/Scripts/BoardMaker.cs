@@ -12,27 +12,24 @@ public class BoardMaker : MonoBehaviour
 
     [SerializeField]
     //List of vector3 that indicates the generated rooms positions
-    List<Vector2> roomPositions = new List<Vector2>();
+    List<Vector2> roomGridPositions = new List<Vector2>();
 
     //List of the random empty spots in the grid
     List<Vector2> randomPositions = new List<Vector2>();
 
-    public RoomGenerator[] roomGenerators;
-    //Current room generator
-    RoomGenerator pickedGenerator;
+    public GameObject[] emptyRoomsArrayHigh;
+    public GameObject[] emptyRoomsArrayMid;
+    public GameObject[] emptyRoomsArrayLow;
+    public GameObject intialRoom;
 
     public GameObject player;
-    public GameObject testObj;
+    public GameObject closingWallObj;
     GameObject bossRoom;
 
     //Main holder for all game objects
     GameObject Board;
     //Max dept that the rooms can reach
-    public int maxRoomDepth = 4;
-
-    public int specialRoomRarity = 25;
-    public int maxSpecialRooms = 3;
-    int currentSpecialRooms = 0;
+    int maxRoomDepth = 4;
 
     //Reference to the camera
     Camera mainCamera;
@@ -41,10 +38,10 @@ public class BoardMaker : MonoBehaviour
 
     public GameObject monsterSpawner;
 
-    public void BoardInit()
+    public void BoardInit(int dungeonDepth)
     {
-        pickedGenerator = roomGenerators[Random.Range(0, roomGenerators.Length)];
         mainCamera = Camera.main;
+        maxRoomDepth = dungeonDepth;
         GenerateBoard();
     }
 
@@ -54,7 +51,7 @@ public class BoardMaker : MonoBehaviour
         Board = new GameObject("BoardHolder");
         CreateRoom();
         SealDungeon();
-        PopulateDungeon();
+        //PopulateDungeon();
         HideDungeon();
     }
 
@@ -62,13 +59,12 @@ public class BoardMaker : MonoBehaviour
     {
         //Creation of the first room
         generatedRooms = new List<GameObject>();
-        GameObject firstRoom = pickedGenerator.GenerateRoom(Vector2.zero);
+        GameObject firstRoom = Instantiate(intialRoom, Vector3.zero, Quaternion.identity);
         firstRoom.transform.SetParent(Board.transform);
         generatedRooms.Add(firstRoom);
         roomStats firstRoomStats = firstRoom.GetComponent<roomStats>();
         firstRoomStats.isSpecial = true;
-        firstRoomStats.roomCoordinates = Vector2.zero;
-        roomPositions.Add(firstRoomStats.roomCoordinates);
+        firstRoomStats.isActive = true;
         int middleX = firstRoomStats.width / 2;
         int middleY = firstRoomStats.height / 2;
         //Adjusting position of the camera to the center of the first room
@@ -76,12 +72,168 @@ public class BoardMaker : MonoBehaviour
         mainCamera.transform.position = cameraPosition + new Vector3(0.5f, 0.5f, 0f);
         mainCamera.GetComponent<CameraMovements>().currentRoomWidth = firstRoomStats.width;
         mainCamera.GetComponent<CameraMovements>().currentRoomHeight = firstRoomStats.height;
-        mainCamera.GetComponent<CameraMovements>().currentRoomCoordinates = firstRoom.transform.position;
         Instantiate(player, new Vector3(middleX, middleY, 0f), Quaternion.identity);
+        foreach (Vector2 newRoomLocalGridPosition in firstRoomStats.internalGrid)
+        {
+            Vector2 worldGridPosition = newRoomLocalGridPosition;
+            if (!roomGridPositions.Contains(worldGridPosition))
+                roomGridPositions.Add(worldGridPosition);
+        }
+        if (maxRoomDepth < 1)
+        {
+            return;
+        }
         BranchOut(firstRoom);
     }
 
-    void BranchOut(GameObject startingRoom)
+    void BranchOut(GameObject oldRoom)
+    {
+        roomStats oldRoomStats = oldRoom.GetComponent<roomStats>();
+        List<GameObject> connectors = SearchChildren.SearchForTag(oldRoom, "Connector");
+        List<GameObject> ourDoors = SearchChildren.SearchForTag(oldRoom, "Door");
+        oldRoomStats.doors = ourDoors;
+        RandomHelper.ShuffleList(connectors);
+        foreach (GameObject currentConnector in connectors)
+        {
+            ConnectorStat currentConnectorStats = currentConnector.GetComponent<ConnectorStat>();
+            Vector2 newRoomPositionGrid = MoveTo(currentConnectorStats.dir, oldRoomStats.roomCoordinates + currentConnectorStats.localGridPosition);
+            if (roomGridPositions.Contains(newRoomPositionGrid))
+            {
+                continue;
+            }
+            GameObject pickedRoom = PickRoom(newRoomPositionGrid);
+            Vector3 newRoomPosition = new Vector3(newRoomPositionGrid.x * 28, newRoomPositionGrid.y * 28);
+            GameObject instantiatedRoom = Instantiate(pickedRoom, newRoomPosition, Quaternion.identity);
+            roomStats instantiatedRoomStats = instantiatedRoom.GetComponent<roomStats>();
+            instantiatedRoomStats.roomCoordinates = newRoomPositionGrid;
+            instantiatedRoomStats.roomDepth = oldRoomStats.roomDepth + 1;
+            instantiatedRoomStats.isActive = true;
+            instantiatedRoom.transform.SetParent(Board.transform);
+            foreach (Vector2 newRoomLocalGridPosition in instantiatedRoomStats.internalGrid)
+            {
+                Vector2 worldGridPosition = newRoomLocalGridPosition + newRoomPositionGrid;
+                if (!roomGridPositions.Contains(worldGridPosition))
+                    roomGridPositions.Add(worldGridPosition);
+                else
+                    Debug.Log("Error, already containing position " + newRoomLocalGridPosition);
+            }
+            generatedRooms.Add(instantiatedRoom);
+
+            List<GameObject> otherDoors = SearchChildren.SearchForTag(instantiatedRoom, "Door");
+            List<GameObject> otherConnectors = SearchChildren.SearchForTag(instantiatedRoom, "Connector");
+            GameObject doorToConnect = null;
+            Vector2 doorToConnectGridPosition = Vector2.zero;
+            foreach (GameObject ourDoor in ourDoors)
+            {
+                Vector3 ourDoorPosition = MoveTo(ReverseDirection(currentConnectorStats.dir), currentConnector.transform.position);
+                if (ourDoor.transform.position != ourDoorPosition)
+                {
+                    continue;
+                }
+                doorToConnectGridPosition = currentConnectorStats.localGridPosition + oldRoomStats.roomCoordinates;
+                DoorStats ourDoorStats = ourDoor.GetComponent<DoorStats>();
+                ourDoorStats.connectingRoom = instantiatedRoom;
+                doorToConnect = ourDoor;
+            }
+
+            foreach (GameObject otherDoor in otherDoors)
+            {
+                Vector2 otherDoorGridPosition = MoveTo(currentConnectorStats.dir, oldRoomStats.roomCoordinates + currentConnectorStats.localGridPosition);
+                if (otherDoor.GetComponent<DoorStats>().dir == ReverseDirection(doorToConnect.GetComponent<DoorStats>().dir))
+                {
+                    if (otherDoor.GetComponent<DoorStats>().dir == direction.NORTH || otherDoor.GetComponent<DoorStats>().dir == direction.SOUTH)
+                    {
+                        if (otherDoorGridPosition.x == doorToConnectGridPosition.x)
+                        {
+                            otherDoor.GetComponent<DoorStats>().connectingRoom = oldRoom;
+                            otherDoor.GetComponent<DoorStats>().otherDoorObj = doorToConnect;
+                            doorToConnect.GetComponent<DoorStats>().connectingRoom = instantiatedRoom;
+                            doorToConnect.GetComponent<DoorStats>().otherDoorObj = otherDoor;
+                            break;
+                        }
+                    }
+                    else if (otherDoor.GetComponent<DoorStats>().dir == direction.EAST || otherDoor.GetComponent<DoorStats>().dir == direction.WEST)
+                    {
+                        if (otherDoorGridPosition.y == doorToConnectGridPosition.y)
+                        {
+                            otherDoor.GetComponent<DoorStats>().connectingRoom = oldRoom;
+                            otherDoor.GetComponent<DoorStats>().otherDoorObj = doorToConnect;
+                            doorToConnect.GetComponent<DoorStats>().connectingRoom = instantiatedRoom;
+                            doorToConnect.GetComponent<DoorStats>().otherDoorObj = otherDoor;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (instantiatedRoomStats.roomDepth < maxRoomDepth)
+            {
+                BranchOut(instantiatedRoom);
+            }
+
+        }
+    }
+
+    GameObject PickRoom(Vector2 gridPosition)
+    {
+        GameObject pickedRoom = null;
+        float[] weights = { 65, 25, 10 };
+        int arrayToPick = RandomHelper.GetRandomWeightedIndex(weights);
+        switch (arrayToPick)
+        {
+            case (0):
+                pickedRoom = emptyRoomsArrayHigh[Random.Range(0, emptyRoomsArrayHigh.Length)];
+                break;
+            case (1):
+                pickedRoom = emptyRoomsArrayMid[Random.Range(0, emptyRoomsArrayMid.Length)];
+                break;
+            case (2):
+                pickedRoom = emptyRoomsArrayLow[Random.Range(0, emptyRoomsArrayLow.Length)];
+                break;
+        }
+
+        roomStats pickedRoomStats = pickedRoom.GetComponent<roomStats>();
+        foreach (Vector2 localGridPosition in pickedRoomStats.internalGrid)
+        {
+            Vector2 worldGridPosition = localGridPosition + gridPosition;
+            if (roomGridPositions.Contains(worldGridPosition))
+            {
+                return PickRoom(gridPosition);
+            }
+        }
+        return pickedRoom;
+    }
+
+    void SealDungeon()
+    {
+        foreach (GameObject currentRoom in generatedRooms)
+        {
+            List<GameObject> currentDoors = SearchChildren.SearchForTag(currentRoom, "Door");
+            foreach (GameObject currentDoor in currentDoors)
+            {
+                if (currentDoor.GetComponent<DoorStats>().connectingRoom == null)
+                {
+                    GameObject closingWall = Instantiate(closingWallObj, currentDoor.transform.position, Quaternion.identity);
+                    closingWall.transform.SetParent(currentRoom.transform.GetChild(0));
+                    Destroy(currentDoor);
+                }
+            }
+        }
+    }
+
+    void HideDungeon()
+    {
+        foreach (GameObject currentRoom in generatedRooms)
+        {
+            if (currentRoom == generatedRooms[0])
+            {
+                continue;
+            }
+            currentRoom.SetActive(false);
+        }
+    }
+
+    /*void BranchOut(GameObject startingRoom)
     {
         List<GameObject> connectors = SearchChildren.SearchForTag(startingRoom, "Connector");
         List<GameObject> doors = SearchChildren.SearchForTag(startingRoom, "Door");
@@ -124,12 +276,12 @@ public class BoardMaker : MonoBehaviour
                 continue;
             }
 
-            if (roomPositions.Contains(newRoomPositionGrid) || randomPositions.Contains(newRoomPositionGrid))
+            if (roomGridPositions.Contains(newRoomPositionGrid) || randomPositions.Contains(newRoomPositionGrid))
             {
                 continue;
             }
 
-            roomPositions.Add(newRoomPositionGrid);
+            roomGridPositions.Add(newRoomPositionGrid);
             pickedGenerator = roomGenerators[Random.Range(0, roomGenerators.Length)];
             GameObject otherRoomObj = pickedGenerator.GenerateRoom(newRoomPosition);
             roomStats otherRoomStat = otherRoomObj.GetComponent<roomStats>();
@@ -143,8 +295,6 @@ public class BoardMaker : MonoBehaviour
                 }
             }
 
-            startingRoomStats.Connect(otherRoomObj, dir);
-            otherRoomStat.Connect(startingRoom, DirectionalMovement.ReverseDirection(dir));
             otherRoomStat.roomCoordinates = newRoomPositionGrid;
             startingRoomStats.connectedDirs |= originalDir;
             otherRoomStat.connectedDirs |= DirectionalMovement.ReverseDirection(originalDir);
@@ -184,188 +334,5 @@ public class BoardMaker : MonoBehaviour
                 BranchOut(otherRoomObj);
             }
         }
-    }
-
-    void SealDungeon()
-    {
-        foreach (GameObject room in generatedRooms)
-        {
-            List<GameObject> connectors = SearchChildren.SearchForTag(room, "Connector");
-            List<GameObject> doors = SearchChildren.SearchForTag(room, "Door");
-            foreach (GameObject connector in connectors)
-            {
-                direction roomDir = room.GetComponent<roomStats>().connectedDirs;
-                direction connectorDir = connector.GetComponent<ConnectorStat>().dir;
-                if (roomDir.HasFlag(connectorDir))
-                {
-                    continue;
-                }
-
-                direction reverseDir = DirectionalMovement.ReverseDirection(connectorDir);
-                Vector3 wallPosition = DirectionalMovement.MoveTo(reverseDir, connector.transform.position);
-                GameObject wallToGenerate = pickedGenerator.wallArray[Random.Range(0, pickedGenerator.wallArray.Length)];
-
-                GameObject wall = Instantiate(wallToGenerate, wallPosition, Quaternion.identity);
-                Transform wallHolder = room.transform.GetChild(0);
-                wall.transform.SetParent(wallHolder);
-                foreach (GameObject door in doors)
-                {
-                    if (door.GetComponent<DoorStats>().dir == connectorDir)
-                    {
-                        room.GetComponent<roomStats>().doors.Remove(door);
-                        Destroy(door);
-                    }
-                }
-            }
-        }
-    }
-    void HideDungeon()
-    {
-        foreach (GameObject room in generatedRooms)
-        {
-            if (room == generatedRooms[0])
-            {
-                continue;
-            }
-            room.SetActive(false);
-        }
-    }
-
-    void PopulateDungeon()
-    {
-        CreateSpecialRooms();
-        AddObstacles();
-        AddMonsters();
-    }
-
-    void CreateSpecialRooms()
-    {
-        List<GameObject> selectedRooms = new List<GameObject>();
-        foreach (GameObject room in generatedRooms)
-        {
-            if (room.GetComponent<roomStats>().roomDepth < maxRoomDepth)
-            {
-                continue;
-            }
-            selectedRooms.Add(room);
-        }
-        RunSpecialSelection(selectedRooms);
-
-        if (bossRoom)
-        {
-            Debug.Log("Hello boss");
-        }
-        else
-        {
-            Debug.Log("Oh no");
-            CreateSpecialRooms();
-        }
-    }
-
-    void RunSpecialSelection(List<GameObject> selectedRooms)
-    {
-        foreach (GameObject currentRoom in selectedRooms)
-        {
-            roomStats currentRoomStats = currentRoom.GetComponent<roomStats>();
-            if (!RandomHelper.prob(specialRoomRarity) || currentSpecialRooms >= maxSpecialRooms)
-            {
-                if (!bossRoom)
-                {
-                    bossRoom = currentRoom;
-                }
-                continue;
-            }
-            if (!bossRoom)
-            {
-                bossRoom = currentRoom;
-            }
-            specialRooms.Add(currentRoom);
-            currentSpecialRooms++;
-            Vector3 middlePoint = new Vector3(currentRoomStats.width / 2, currentRoomStats.height / 2, 0f);
-            GameObject specialObj = Instantiate(testObj, currentRoom.transform.position + middlePoint, Quaternion.identity);
-            specialObj.transform.SetParent(currentRoom.transform);
-            currentRoomStats.isSpecial = true;
-            foreach (GameObject door in currentRoomStats.doors)
-            {
-                GameObject otherDoor = door.GetComponent<DoorStats>().otherDoorObj;
-            }
-        }
-    }
-
-    void AddObstacles()
-    {
-        foreach (GameObject room in generatedRooms)
-        {
-            GameObject obstacleHolder = new GameObject("obstacleHolder");
-            obstacleHolder.transform.SetParent(room.transform);
-            roomStats currentRoomStats = room.GetComponent<roomStats>();
-            if (currentRoomStats.isSpecial == true)
-            {
-                continue;
-            }
-            List<Vector3> internalRoomGrid = new List<Vector3>();
-            foreach (Vector3 position in currentRoomStats.internalGridPositions)
-            {
-                internalRoomGrid.Add(room.transform.position + position);
-            }
-            foreach (GameObject door in currentRoomStats.doors)
-            {
-                Vector3 nearDoor = MoveTo(ReverseDirection(door.GetComponent<DoorStats>().dir), door.transform.position);
-                internalRoomGrid.Remove(nearDoor);
-                currentRoomStats.availableSpace--;
-            }
-            RoomGenerator roomGen = currentRoomStats.roomGenerator;
-            int randomObstacleAmount = Random.Range(1, 3);
-            for (int i = 0; i < randomObstacleAmount; i++)
-            {
-                Vector3 randomPosition = RandomHelper.RandomPosition(internalRoomGrid);
-                GameObject obstacle = Instantiate(roomGen.obstacleArray[Random.Range(0, roomGen.obstacleArray.Length)], randomPosition, Quaternion.identity);
-                obstacle.transform.SetParent(obstacleHolder.transform);
-                currentRoomStats.obstacles.Add(obstacle);
-            }
-        }
-    }
-
-    void AddMonsters()
-    {
-        foreach (GameObject room in generatedRooms)
-        {
-            GameObject monsterHolder = new GameObject("monsterHolder");
-            monsterHolder.transform.SetParent(room.transform);
-            roomStats currentRoomStats = room.GetComponent<roomStats>();
-            if (currentRoomStats.isSpecial == true)
-            {
-                continue;
-            }
-
-            List<Vector3> internalRoomGrid = new List<Vector3>();
-            foreach (Vector3 position in currentRoomStats.internalGridPositions)
-            {
-                internalRoomGrid.Add(room.transform.position + position);
-            }
-            foreach (GameObject door in currentRoomStats.doors)
-            {
-                Vector3 nearDoor = MoveTo(ReverseDirection(door.GetComponent<DoorStats>().dir), door.transform.position);
-                internalRoomGrid.Remove(nearDoor);
-                currentRoomStats.internalGridPositions.Remove(nearDoor);
-                currentRoomStats.availableSpace--;
-            }
-            foreach (GameObject obstacle in currentRoomStats.obstacles)
-            {
-                internalRoomGrid.Remove(obstacle.transform.position);
-                currentRoomStats.availableSpace--;
-            }
-
-            RoomGenerator roomGen = currentRoomStats.roomGenerator;
-            int randomMonsterAmount = Mathf.Max(0, Random.Range(0, (currentRoomStats.availableSpace + 1) / 2));
-            for (int i = 0; i <= randomMonsterAmount; i++)
-            {
-                Vector3 randomPosition = RandomHelper.RandomPosition(internalRoomGrid);
-                GameObject monsterSpawnerInstance = Instantiate(monsterSpawner, randomPosition, Quaternion.identity);
-                monsterSpawnerInstance.transform.SetParent(monsterHolder.transform);
-                monsterSpawnerInstance.GetComponent<MonsterSpawn>().room = currentRoomStats;
-                currentRoomStats.monsterSpawners.Add(monsterSpawnerInstance);
-            }
-        }
-    }
+    }*/
 }

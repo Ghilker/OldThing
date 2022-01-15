@@ -8,26 +8,15 @@ public class roomStats : MonoBehaviour
     public int width;
     public int height;
     public Vector2 roomCoordinates;
-    public List<GameObject> connectedRooms;
+    public List<Vector2> internalGrid = new List<Vector2>();
     public List<GameObject> doors;
-    public direction connectedDirs;
     public int roomDepth = 0;
     public bool isActive = true;
     public List<GameObject> monsters = new List<GameObject>();
     public List<GameObject> monsterSpawners = new List<GameObject>();
-    public List<GameObject> roomObjects = new List<GameObject>();
-    public List<Vector3> internalGridPositions = new List<Vector3>();
     [SerializeField]
     bool canSpawn = true;
     public bool isSpecial = false;
-    public RoomGenerator roomGenerator;
-    public int availableSpace = 0;
-    public List<GameObject> obstacles = new List<GameObject>();
-
-    public void Connect(GameObject otherRoom, direction dir)
-    {
-        connectedRooms.Add(otherRoom);
-    }
 
     private void Update()
     {
@@ -57,6 +46,10 @@ public class roomStats : MonoBehaviour
         isActive = false;
         foreach (GameObject door in doors)
         {
+            if (door == null)
+            {
+                continue;
+            }
             door.GetComponent<DoorStats>().DoorDisable();
         }
     }

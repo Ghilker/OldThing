@@ -153,6 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardMaker: {fileID: 1917300986}
+  dungeonDepth: 2
 --- !u!4 &1529335530
 Transform:
   m_ObjectHideFlags: 0
@@ -211,16 +212,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   generatedRooms: []
-  roomPositions: []
-  roomGenerators:
-  - {fileID: 11400000, guid: 4a150815fd3dc0945b6ed286c82b7fca, type: 2}
-  - {fileID: 11400000, guid: dda4a14bfd110a64085a39a280534fa8, type: 2}
-  - {fileID: 11400000, guid: 298d89e3049726e4c98ef57097e8a5fe, type: 2}
+  roomGridPositions: []
+  emptyRoomsArrayHigh:
+  - {fileID: 7515591716268277950, guid: fa7146dc3c58aca42bedcd0bf350e5f1, type: 3}
+  emptyRoomsArrayMid:
+  - {fileID: 2733099624967323832, guid: 848f5a35a18645944833cde5f5680de3, type: 3}
+  - {fileID: 1390478288560336387, guid: 9fae7e4dc49ecc149992fd7533f9cf43, type: 3}
+  - {fileID: 6733590648151861703, guid: 03e1a7281c0545743931061a86882099, type: 3}
+  emptyRoomsArrayLow:
+  - {fileID: 7531624319855287909, guid: ed0477d99652e1a40bd7f438a8bc16eb, type: 3}
+  - {fileID: 1992335967292297004, guid: 64fbd7f9824705442bc133d5dfa374ef, type: 3}
+  - {fileID: 1019448312346106175, guid: 1e46518ddeeacae41b2e9470ce44e05e, type: 3}
+  - {fileID: 8173862136187514695, guid: ff798d9eff1785349bb414fa266ed776, type: 3}
+  intialRoom: {fileID: 7515591716268277950, guid: fa7146dc3c58aca42bedcd0bf350e5f1, type: 3}
   player: {fileID: 5274553093934247594, guid: a0003442fbee1fc4c87df7f5af02eaef, type: 3}
-  testObj: {fileID: 7690990573777163318, guid: 235cbd21dc479414d931965fc556177b, type: 3}
-  maxRoomDepth: 2
-  specialRoomRarity: 5
-  maxSpecialRooms: 3
+  closingWallObj: {fileID: 7690990573777163318, guid: 235cbd21dc479414d931965fc556177b, type: 3}
   monsterSpawner: {fileID: 898880750962155432, guid: 251b17e8135799947803ca405041c27a, type: 3}
 --- !u!1 &1964189116
 GameObject:
@@ -276,7 +282,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 4.5
+  orthographic size: 20
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -300,7 +306,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1964189116}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 7.11, y: 4.52, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

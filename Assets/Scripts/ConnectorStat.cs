@@ -6,4 +6,5 @@ public class ConnectorStat : MonoBehaviour
 {
     public direction dir;
     public bool connected = false;
+    public Vector2 localGridPosition;
 }

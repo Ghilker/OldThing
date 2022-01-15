@@ -6,8 +6,8 @@ public class CameraMovements : MonoBehaviour
 {
     GameObject player;
 
-    int baseWidth = 10;
-    int baseHeight = 10;
+    int baseWidth = 14;
+    int baseHeight = 8;
     public int currentRoomWidth = 10;
     public int currentRoomHeight = 10;
     public Vector3 currentRoomCoordinates;
