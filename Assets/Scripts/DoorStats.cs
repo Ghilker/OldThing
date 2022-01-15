@@ -8,33 +8,24 @@ public class DoorStats : MonoBehaviour
     public direction dir;
     public GameObject connectingRoom;
     public GameObject otherDoorObj;
+    public bool connected = false;
 
     public void DoorDisable()
     {
-        foreach (GameObject otherDoor in connectingRoom.GetComponent<roomStats>().doors)
-        {
-            if (otherDoor.GetComponent<DoorStats>().dir != DirectionalMovement.ReverseDirection(dir))
-            {
-                continue;
-            }
-            otherDoor.GetComponent<SpriteRenderer>().enabled = false;
-            otherDoor.GetComponent<BoxCollider2D>().isTrigger = true;
-        }
+
+        otherDoorObj.GetComponent<SpriteRenderer>().enabled = false;
+        otherDoorObj.GetComponent<BoxCollider2D>().isTrigger = true;
+
         GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<BoxCollider2D>().isTrigger = true;
     }
 
     public void DoorEnable()
     {
-        foreach (GameObject otherDoor in connectingRoom.GetComponent<roomStats>().doors)
-        {
-            if (otherDoor.GetComponent<DoorStats>().dir != DirectionalMovement.ReverseDirection(dir))
-            {
-                continue;
-            }
-            otherDoor.GetComponent<SpriteRenderer>().enabled = true;
-            otherDoor.GetComponent<BoxCollider2D>().isTrigger = false;
-        }
+
+        otherDoorObj.GetComponent<SpriteRenderer>().enabled = true;
+        otherDoorObj.GetComponent<BoxCollider2D>().isTrigger = false;
+
         GetComponent<SpriteRenderer>().enabled = true;
         GetComponent<BoxCollider2D>().isTrigger = false;
     }
@@ -66,34 +57,7 @@ public class DoorStats : MonoBehaviour
 
     void RoomHide(GameObject oldRoom, GameObject newRoom)
     {
-        //oldRoom.SetActive(false);
-        List<GameObject> oldObjects = SearchChildren.AllChilds(oldRoom);
-        foreach (GameObject oldObject in oldObjects)
-        {
-            if (!oldObject.GetComponent<SpriteRenderer>())
-            {
-                continue;
-            }
-            Color color = oldObject.GetComponent<SpriteRenderer>().color;
-            color.r = 0.5f;
-            color.g = 0.5f;
-            color.b = 0.5f;
-            oldObject.GetComponent<SpriteRenderer>().color = color;
-        }
+        oldRoom.SetActive(false);
         newRoom.SetActive(true);
-        List<GameObject> newObjects = SearchChildren.AllChilds(newRoom);
-        foreach (GameObject newObject in newObjects)
-        {
-            if (!newObject.GetComponent<SpriteRenderer>())
-            {
-                continue;
-            }
-            Color color = newObject.GetComponent<SpriteRenderer>().color;
-            color.r = 1f;
-            color.g = 1f;
-            color.b = 1f;
-            newObject.GetComponent<SpriteRenderer>().color = color;
-        }
-
     }
 }

@@ -75,7 +75,6 @@ public class RoomGenerator : ScriptableObject
 
                 }
                 GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity);
-                instancedRoomStats.roomObjects.Add(instance);
                 if (isWall == true)
                 {
                     instance.transform.SetParent(wallHolder.transform);
@@ -89,8 +88,6 @@ public class RoomGenerator : ScriptableObject
 
         instancedRoom.transform.localPosition = Vector3.zero;
         instancedRoom.transform.position = roomPosition;
-        instancedRoomStats.internalGridPositions = gridPositions;
-        instancedRoomStats.availableSpace = gridPositions.Count;
         return instancedRoom;
     }
 

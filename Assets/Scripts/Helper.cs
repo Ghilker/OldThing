@@ -106,6 +106,36 @@ namespace Helper
                 listToRandomize[randomIndex] = temp;
             }
         }
+
+        public static int GetRandomWeightedIndex(float[] weights)
+        {
+            if (weights == null || weights.Length == 0) return -1;
+
+            float weight;
+            float total = 0;
+            int i;
+            for (i = 0; i < weights.Length; i++)
+            {
+                weight = weights[i];
+                if (float.IsInfinity(weight)) return i;
+                else if (weight >= 0f && !float.IsNaN(weight)) { total += weights[i]; }
+            }
+
+            float r = Random.value;
+            float s = 0f;
+
+            for (i = 0; i < weights.Length; i++)
+            {
+                weight = weights[i];
+                if (float.IsNaN(weight) || weight <= 0f) continue;
+
+                s += weight / total;
+                if (s >= r) return i;
+            }
+
+            return -1;
+        }
+
     }
 
     public class DirectionalMovement
@@ -264,26 +294,78 @@ namespace Helper
             return isRoomPresent;
         }
 
-        public static Vector3 GetVectorOffsetInDir(direction dir, Vector3 startingVector, int offset = 1)
+        public static Vector3 GetVectorOffsetInDir(direction dir, Vector3 startingVector, int offsetX = 0, int offsetY = 0)
         {
             Vector3 outputVector = startingVector;
             if (dir == direction.NORTH)
             {
-                outputVector += new Vector3(0f, offset, 0f);
+                outputVector += new Vector3(0f, offsetY, 0f);
             }
             else if (dir == direction.SOUTH)
             {
-                outputVector += new Vector3(0f, -offset, 0f);
+                outputVector += new Vector3(0f, -offsetY, 0f);
             }
             else if (dir == direction.EAST)
             {
-                outputVector += new Vector3(offset, 0f, 0f);
+                outputVector += new Vector3(offsetX, 0f, 0f);
             }
             else if (dir == direction.WEST)
             {
-                outputVector += new Vector3(-offset, 0f, 0f);
+                outputVector += new Vector3(-offsetX, 0f, 0f);
             }
             return outputVector;
+        }
+
+    }
+
+    public class WorldTexGen
+    {
+        public static TextMesh CreateWorldText(string text, Transform parent = null, Vector3 localPosition = default(Vector3), int fontsize = 40, Color? color = null, TextAnchor textAnchor = TextAnchor.UpperLeft, TextAlignment textAlignment = TextAlignment.Left, int sortingOrder = 5000)
+        {
+            if (color == null) color = Color.white;
+            return CreateWorldText(parent, text, localPosition, fontsize, (Color)color, textAnchor, textAlignment, sortingOrder);
+        }
+
+        public static TextMesh CreateWorldText(Transform parent, string text, Vector3 localPosition, int fontsize, Color color, TextAnchor textAnchor, TextAlignment textAlignment, int sortingOrder)
+        {
+            GameObject gameObject = new GameObject("World_text", typeof(TextMesh));
+            Transform transform = gameObject.transform;
+            transform.SetParent(parent, false);
+            transform.localPosition = localPosition;
+            TextMesh textMesh = gameObject.GetComponent<TextMesh>();
+            textMesh.anchor = textAnchor;
+            textMesh.alignment = textAlignment;
+            textMesh.text = text;
+            textMesh.fontSize = fontsize;
+            textMesh.color = color;
+            textMesh.GetComponent<MeshRenderer>().sortingOrder = sortingOrder;
+            return textMesh;
+        }
+    }
+
+    public class MouseCamera
+    {
+        public static Vector3 GetMouseWorldPosition()
+        {
+            Vector3 vec = GetMouseWorldPositionWithZ(Input.mousePosition, Camera.main);
+            vec.z = 0f;
+            return vec;
+        }
+
+        public static Vector3 GetMouseWorldPositionWithZ()
+        {
+            return GetMouseWorldPositionWithZ(Input.mousePosition, Camera.main);
+        }
+
+        public static Vector3 GetMouseWorldPositionWithZ(Camera worldCamera)
+        {
+            return GetMouseWorldPositionWithZ(Input.mousePosition, worldCamera);
+        }
+
+        public static Vector3 GetMouseWorldPositionWithZ(Vector3 screenPosition, Camera worldCamera)
+        {
+            Vector3 worldPosition = worldCamera.ScreenToWorldPoint(screenPosition);
+            return worldPosition;
         }
     }
 }
