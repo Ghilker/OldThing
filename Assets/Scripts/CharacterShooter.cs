@@ -33,7 +33,7 @@ public class CharacterShooter : MonoBehaviour
         if (Input.GetMouseButton(0) && elapsedTime < Time.time)
         {
             GameObject instantiatedBullet = Instantiate(_projectile, shootingPoint.position, shootingPivot.rotation);
-            instantiatedBullet.GetComponent<Rigidbody2D>().velocity += (Vector2)shootingPoint.up * 2;
+            instantiatedBullet.GetComponent<Rigidbody2D>().velocity += (Vector2)shootingPivot.right * 2;
             elapsedTime = Time.time + 0.5f;
         }
     }
