@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using Helper;
 
 public class roomStats : MonoBehaviour
@@ -13,17 +14,19 @@ public class roomStats : MonoBehaviour
     public int roomDepth = 0;
     public bool isActive = true;
     public List<GameObject> monsters = new List<GameObject>();
-    public List<GameObject> monsterSpawners = new List<GameObject>();
-    [SerializeField]
-    bool canSpawn = true;
+    public List<GameObject> monsterSpawners;
+    public bool canSpawn = true;
     public bool isSpecial = false;
+    public NavMeshSurface2d navMesh;
 
     private void Update()
     {
         if (!isActive) { return; }
         bool shouldDeactivate = true;
+
         if (canSpawn)
         {
+            navMesh.BuildNavMeshAsync();
             SpawnMonsters();
             canSpawn = false;
         }
@@ -60,6 +63,7 @@ public class roomStats : MonoBehaviour
         {
             if (monsterSpawner.GetComponent<MonsterSpawn>().canSpawn)
             {
+                monsterSpawner.GetComponent<MonsterSpawn>().room = GetComponent<roomStats>();
                 monsterSpawner.GetComponent<MonsterSpawn>().SpawnMonsters();
             }
         }

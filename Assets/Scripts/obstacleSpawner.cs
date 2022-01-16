@@ -21,12 +21,12 @@ public class obstacleSpawner : MonoBehaviour
         if (!square)
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position + new Vector3(.5f, .5f, 0f), 0.5f);
+            Gizmos.DrawWireSphere(transform.position, 0.5f);
         }
         else
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireCube(transform.position + new Vector3(.5f, .5f, 0f), Vector3.one);
+            Gizmos.DrawWireCube(transform.position, Vector3.one);
         }
 
 

@@ -27,6 +27,24 @@ namespace Helper
             return childrenWithTag;
         }
 
+        public static List<GameObject> SearchAllChildTag(GameObject root, string tag)
+        {
+            List<GameObject> childrenWithTag = new List<GameObject>();
+            List<GameObject> allChildren = new List<GameObject>();
+            allChildren = AllChilds(root);
+
+            foreach (GameObject child in allChildren)
+            {
+                if (child.tag != tag)
+                {
+                    continue;
+                }
+                childrenWithTag.Add(child);
+            }
+
+            return childrenWithTag;
+        }
+
         public static List<GameObject> AllChilds(GameObject root)
         {
             List<GameObject> result = new List<GameObject>();
