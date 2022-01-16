@@ -11,6 +11,8 @@ TagManager:
   - Wall
   - Floor
   - Door
+  - Bullet
+  - ObstacleSpawner
   layers:
   - Default
   - TransparentFX

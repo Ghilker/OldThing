@@ -15,8 +15,10 @@ public class roomStats : MonoBehaviour
     public bool isActive = true;
     public List<GameObject> monsters = new List<GameObject>();
     public List<GameObject> monsterSpawners;
+    public List<GameObject> obstacleSpawners;
     public bool canSpawn = true;
     public bool isSpecial = false;
+    public bool isBossRoom = false;
     public NavMeshSurface2d navMesh;
 
     private void Update()
@@ -26,7 +28,8 @@ public class roomStats : MonoBehaviour
 
         if (canSpawn)
         {
-            navMesh.BuildNavMeshAsync();
+            SpawnObstacles();
+            navMesh.BuildNavMesh();
             SpawnMonsters();
             canSpawn = false;
         }
@@ -70,6 +73,16 @@ public class roomStats : MonoBehaviour
         foreach (GameObject door in doors)
         {
             door.GetComponent<DoorStats>().DoorEnable();
+        }
+    }
+    void SpawnObstacles()
+    {
+        foreach (GameObject obstacleSpawner in obstacleSpawners)
+        {
+            if (obstacleSpawner != null && obstacleSpawner.GetComponent<obstacleSpawner>().canSpawn)
+            {
+                obstacleSpawner.GetComponent<obstacleSpawner>().SpawnObstacle();
+            }
         }
     }
 

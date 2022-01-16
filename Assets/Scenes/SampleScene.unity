@@ -223,8 +223,8 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.06666667
   m_BuildHeightMesh: 0
-  m_HideEditorLogs: 0
-  m_NavMeshData: {fileID: 0}
+  m_HideEditorLogs: 1
+  m_NavMeshData: {fileID: 23800000, guid: f1c1938022688154fb2e45a04ab30cb3, type: 2}
 --- !u!4 &1310164124
 Transform:
   m_ObjectHideFlags: 0
@@ -269,7 +269,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardMaker: {fileID: 1917300986}
-  dungeonDepth: 6
+  dungeonDepth: 3
 --- !u!4 &1529335530
 Transform:
   m_ObjectHideFlags: 0
@@ -376,12 +376,11 @@ MonoBehaviour:
   - {fileID: 2885491188443442418, guid: 401b46ecdb903c6449e2f43ba2dbe8f1, type: 3}
   - {fileID: 8247012062377729764, guid: d9f02f1e323595b45929e60822432763, type: 3}
   - {fileID: 743694393091981774, guid: 848f5a35a18645944833cde5f5680de3, type: 3}
-  emptyRoomsArrayLow:
-  - {fileID: 7531624319855287909, guid: ed0477d99652e1a40bd7f438a8bc16eb, type: 3}
-  - {fileID: 1992335967292297004, guid: 64fbd7f9824705442bc133d5dfa374ef, type: 3}
-  - {fileID: 1019448312346106175, guid: 1e46518ddeeacae41b2e9470ce44e05e, type: 3}
-  - {fileID: 8173862136187514695, guid: ff798d9eff1785349bb414fa266ed776, type: 3}
+  emptyRoomsArrayLow: []
   intialRoom: {fileID: 7515591716268277950, guid: fa7146dc3c58aca42bedcd0bf350e5f1, type: 3}
+  bossRooms:
+  - {fileID: 7515591716268277950, guid: fa7146dc3c58aca42bedcd0bf350e5f1, type: 3}
+  bossRoom: {fileID: 0}
   player: {fileID: 5274553093934247594, guid: a0003442fbee1fc4c87df7f5af02eaef, type: 3}
   closingWallObj: {fileID: 7690990573777163318, guid: 235cbd21dc479414d931965fc556177b, type: 3}
   monsterSpawner: {fileID: 898880750962155432, guid: 251b17e8135799947803ca405041c27a, type: 3}
