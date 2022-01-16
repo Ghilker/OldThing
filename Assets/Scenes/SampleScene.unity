@@ -153,6 +153,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toInstantiate: {fileID: 898880750962155432, guid: 251b17e8135799947803ca405041c27a, type: 3}
+  allObjects:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 877656874}
+  - {fileID: 1529335528}
+  - {fileID: 1917300983}
+  - {fileID: 1964189116}
 --- !u!4 &877656876
 Transform:
   m_ObjectHideFlags: 0
@@ -167,6 +174,71 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1310164122
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1310164124}
+  - component: {fileID: 1310164123}
+  m_Layer: 0
+  m_Name: nav
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1310164123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310164122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 148387606d0ccd84fa326ca211f274ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 1
+  m_OverrideByGrid: 0
+  m_UseMeshPrefab: {fileID: 0}
+  m_CompressBounds: 0
+  m_OverrideVector: {x: 1, y: 1, z: 1}
+  m_DefaultArea: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.06666667
+  m_BuildHeightMesh: 0
+  m_HideEditorLogs: 0
+  m_NavMeshData: {fileID: 0}
+--- !u!4 &1310164124
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310164122}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!1 &1529335528
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,35 +327,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acc9617480ca3b84ca90ff4185651c50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  navMesh: {fileID: 1310164123}
   generatedRooms: []
   roomGridPositions: []
   emptyRoomsArrayHigh:
   - {fileID: 7118084941167184486, guid: b229fb826f5e2694aacf64ca7d2a81e4, type: 3}
-  - {fileID: 628559548622463357, guid: b16bac7a196c55b4989e7dd70b7196b7, type: 3}
-  - {fileID: 3441840740056854905, guid: 87c52702592db8044a3d9c953ba39898, type: 3}
-  - {fileID: 1872757157228876745, guid: 8dba556870e8dba4cacab22fa773955b, type: 3}
-  - {fileID: 2356795816509401966, guid: 663c8d189ca0bbe4e89d025a1faf5083, type: 3}
-  - {fileID: 5619890796026692326, guid: a4899d98116faf5478f508a24a1acee2, type: 3}
-  - {fileID: 3307979920281340601, guid: f0eea90f95dcd0c4484de74af0abd761, type: 3}
-  - {fileID: 7924290958517077817, guid: 6dcdecfb81e16414a9017c766e147b65, type: 3}
-  - {fileID: 7717763070019023798, guid: 2a5bef18feb1e9c4e88ecaf80971ed78, type: 3}
-  - {fileID: 1401194319524938326, guid: 0b59510abb94c9149bfe3313da061eb3, type: 3}
-  - {fileID: 8334239616675008535, guid: ce330b97893dcdc478b56fc3f3f355a5, type: 3}
-  - {fileID: 2452493768348560993, guid: 3ddcb7f6b6c5cdb4d810c0bb40356d38, type: 3}
-  - {fileID: 399589442107272127, guid: 04b29e6159d268b43b3148eaee8b87cf, type: 3}
-  - {fileID: 7918378783801725350, guid: d84e9adc07dd06047853204087564cbf, type: 3}
-  - {fileID: 5850510679911356978, guid: f998077b1141c954b9f81e086977d182, type: 3}
-  - {fileID: 3248995767334993970, guid: accf75c647ae222449a3f3658b163ca6, type: 3}
-  - {fileID: 3248995767334993970, guid: accf75c647ae222449a3f3658b163ca6, type: 3}
-  - {fileID: 6114366487492887692, guid: 62a0f8c881acde74c9f049cd05e7ed81, type: 3}
-  - {fileID: 2293555038616844470, guid: 93641677c35cac742a72480aae5d2eba, type: 3}
-  - {fileID: 2293555038616844470, guid: 93641677c35cac742a72480aae5d2eba, type: 3}
-  - {fileID: 7336232244255427494, guid: d036db1c7b285784ca078befe887c403, type: 3}
-  - {fileID: 1783453483864135182, guid: ff1176e1a5b83594c9c03f894aadca99, type: 3}
-  - {fileID: 1783453483864135182, guid: ff1176e1a5b83594c9c03f894aadca99, type: 3}
-  - {fileID: 3949957889576700530, guid: 840d21d3eb6d025449f7726d8874c92f, type: 3}
-  - {fileID: 2597226646755333945, guid: b3fdc63c56713a7429dc2eced4dc73ee, type: 3}
-  - {fileID: 197816984350275764, guid: 71434eb6ad76a0f449d3fab23a0351ab, type: 3}
+  - {fileID: 6953964457856232953, guid: b16bac7a196c55b4989e7dd70b7196b7, type: 3}
+  - {fileID: 5751311312024262409, guid: 87c52702592db8044a3d9c953ba39898, type: 3}
+  - {fileID: 1622173180755328874, guid: 8dba556870e8dba4cacab22fa773955b, type: 3}
+  - {fileID: 8826230484111157911, guid: 6dcdecfb81e16414a9017c766e147b65, type: 3}
+  - {fileID: 9116951039246079678, guid: 663c8d189ca0bbe4e89d025a1faf5083, type: 3}
+  - {fileID: 5967721163740465750, guid: a4899d98116faf5478f508a24a1acee2, type: 3}
+  - {fileID: 5499604571839420270, guid: f0eea90f95dcd0c4484de74af0abd761, type: 3}
+  - {fileID: 5318046089745569799, guid: 2a5bef18feb1e9c4e88ecaf80971ed78, type: 3}
+  - {fileID: 6587694337210848930, guid: 0b59510abb94c9149bfe3313da061eb3, type: 3}
+  - {fileID: 3387076623419398489, guid: ce330b97893dcdc478b56fc3f3f355a5, type: 3}
+  - {fileID: 3059568342928417788, guid: 3ddcb7f6b6c5cdb4d810c0bb40356d38, type: 3}
+  - {fileID: 7466167907517855488, guid: 04b29e6159d268b43b3148eaee8b87cf, type: 3}
+  - {fileID: 643686628053794620, guid: d84e9adc07dd06047853204087564cbf, type: 3}
+  - {fileID: 3033120521772308296, guid: f998077b1141c954b9f81e086977d182, type: 3}
+  - {fileID: 2689695063550068190, guid: accf75c647ae222449a3f3658b163ca6, type: 3}
+  - {fileID: 7671921418829723824, guid: 62a0f8c881acde74c9f049cd05e7ed81, type: 3}
+  - {fileID: 5314964340152842517, guid: 93641677c35cac742a72480aae5d2eba, type: 3}
+  - {fileID: 1324205025565896856, guid: d036db1c7b285784ca078befe887c403, type: 3}
+  - {fileID: 7505172680743846837, guid: ff1176e1a5b83594c9c03f894aadca99, type: 3}
+  - {fileID: 4692796994394209893, guid: 840d21d3eb6d025449f7726d8874c92f, type: 3}
+  - {fileID: 1450430014471153638, guid: b3fdc63c56713a7429dc2eced4dc73ee, type: 3}
+  - {fileID: 1695449675696063054, guid: 71434eb6ad76a0f449d3fab23a0351ab, type: 3}
   - {fileID: 8826589960667664362, guid: 25c9b0584d024294faf3b5e7356d1652, type: 3}
   - {fileID: 8921488711000577420, guid: f6356d7d174bc9f4a9320b61ada055c4, type: 3}
   - {fileID: 1440868679995722858, guid: 03fab3d3b22c90e4d9091a0878119464, type: 3}
@@ -296,9 +366,16 @@ MonoBehaviour:
   - {fileID: 189165475996232568, guid: 702ed1b826b5e2441ba7f960a2cceb0d, type: 3}
   - {fileID: 4694803672124563632, guid: df8df501078eaad47b19c3bd23454163, type: 3}
   emptyRoomsArrayMid:
-  - {fileID: 2733099624967323832, guid: 848f5a35a18645944833cde5f5680de3, type: 3}
-  - {fileID: 1390478288560336387, guid: 9fae7e4dc49ecc149992fd7533f9cf43, type: 3}
-  - {fileID: 6733590648151861703, guid: 03e1a7281c0545743931061a86882099, type: 3}
+  - {fileID: 2579571771198896582, guid: 39c505a356c91524cb15ddd767036095, type: 3}
+  - {fileID: 829844147306460811, guid: a2cebb1e6baebec46af3943c29778491, type: 3}
+  - {fileID: 8629481737139185340, guid: 513ad0a0369c18b48943cb377dfc2769, type: 3}
+  - {fileID: 4019729577006962324, guid: fd5e8278c29ba3f4b8755ffef19b08ed, type: 3}
+  - {fileID: 1485627789312463555, guid: e53141dfcf03cbe44a413951e2f7f7bd, type: 3}
+  - {fileID: 6116135139112746208, guid: 1c0d2717855947244a82e0de979741b6, type: 3}
+  - {fileID: 3286629811984905598, guid: fa235d23f06cad64cb00ca3612b86cb3, type: 3}
+  - {fileID: 2885491188443442418, guid: 401b46ecdb903c6449e2f43ba2dbe8f1, type: 3}
+  - {fileID: 8247012062377729764, guid: d9f02f1e323595b45929e60822432763, type: 3}
+  - {fileID: 743694393091981774, guid: 848f5a35a18645944833cde5f5680de3, type: 3}
   emptyRoomsArrayLow:
   - {fileID: 7531624319855287909, guid: ed0477d99652e1a40bd7f438a8bc16eb, type: 3}
   - {fileID: 1992335967292297004, guid: 64fbd7f9824705442bc133d5dfa374ef, type: 3}
