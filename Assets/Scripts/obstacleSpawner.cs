@@ -6,8 +6,9 @@ public class obstacleSpawner : MonoBehaviour
 {
     public List<GameObject> rockObstacles;
     public bool square = false;
+    public bool canSpawn = true;
     // Start is called before the first frame update
-    void Start()
+    public void SpawnObstacle()
     {
         Transform parent = transform.parent;
         GameObject toInstantiate = rockObstacles[Random.Range(0, rockObstacles.Count)];

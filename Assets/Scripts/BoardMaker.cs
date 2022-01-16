@@ -28,9 +28,13 @@ public class BoardMaker : MonoBehaviour
     private List<GameObject> emptyRoomsListLow = new List<GameObject>();
     public GameObject intialRoom;
 
+    public List<GameObject> bossRooms;
+    [SerializeField]
+    GameObject bossRoom;
+    bool hasBoss = false;
+
     public GameObject player;
     public GameObject closingWallObj;
-    GameObject bossRoom;
 
     //Main holder for all game objects
     GameObject Board;
@@ -106,10 +110,15 @@ public class BoardMaker : MonoBehaviour
             {
                 continue;
             }
-            GameObject pickedRoom = PickRoom(newRoomPositionGrid);
+            GameObject pickedRoom = PickRoom(newRoomPositionGrid, oldRoomStats.roomDepth + 1);
             Vector3 newRoomPosition = new Vector3(newRoomPositionGrid.x * 28, newRoomPositionGrid.y * 28);
             GameObject instantiatedRoom = Instantiate(pickedRoom, newRoomPosition, Quaternion.identity);
             roomStats instantiatedRoomStats = instantiatedRoom.GetComponent<roomStats>();
+            if (hasBoss && bossRoom == null)
+            {
+                bossRoom = instantiatedRoom;
+                instantiatedRoomStats.isBossRoom = true;
+            }
             instantiatedRoomStats.roomCoordinates = newRoomPositionGrid;
             instantiatedRoomStats.roomDepth = oldRoomStats.roomDepth + 1;
             instantiatedRoomStats.isActive = true;
@@ -129,6 +138,7 @@ public class BoardMaker : MonoBehaviour
             List<GameObject> otherDoors = SearchChildren.SearchForTag(instantiatedRoom, "Door");
             List<GameObject> otherConnectors = SearchChildren.SearchForTag(instantiatedRoom, "Connector");
             instantiatedRoomStats.monsterSpawners = SearchChildren.SearchAllChildTag(instantiatedRoom, "Spawner");
+            instantiatedRoomStats.obstacleSpawners = SearchChildren.SearchAllChildTag(instantiatedRoom, "Obstacle");
             instantiatedRoomStats.canSpawn = true;
             instantiatedRoomStats.navMesh = navMesh;
             GameObject doorToConnect = null;
@@ -175,19 +185,17 @@ public class BoardMaker : MonoBehaviour
                     }
                 }
             }
-
             if (instantiatedRoomStats.roomDepth < maxRoomDepth)
             {
                 BranchOut(instantiatedRoom);
             }
-
         }
     }
 
-    GameObject PickRoom(Vector2 gridPosition)
+    GameObject PickRoom(Vector2 gridPosition, int insertedDepth)
     {
         GameObject pickedRoom = null;
-        float[] weights = { 65, 25, 10 };
+        float[] weights = { 65, 35 };
         int arrayToPick = RandomHelper.GetRandomWeightedIndex(weights);
         switch (arrayToPick)
         {
@@ -199,10 +207,11 @@ public class BoardMaker : MonoBehaviour
                 pickedRoom = emptyRoomsListMid[Random.Range(0, emptyRoomsListMid.Count)];
                 RandomHelper.ShuffleList(emptyRoomsListMid);
                 break;
-            case (2):
-                pickedRoom = emptyRoomsListLow[Random.Range(0, emptyRoomsListLow.Count)];
-                RandomHelper.ShuffleList(emptyRoomsListLow);
-                break;
+        }
+
+        if (insertedDepth == maxRoomDepth && !bossRoom && !hasBoss)
+        {
+            pickedRoom = bossRooms[Random.Range(0, bossRooms.Count)];
         }
 
         roomStats pickedRoomStats = pickedRoom.GetComponent<roomStats>();
@@ -211,8 +220,12 @@ public class BoardMaker : MonoBehaviour
             Vector2 worldGridPosition = localGridPosition + gridPosition;
             if (roomGridPositions.Contains(worldGridPosition))
             {
-                return PickRoom(gridPosition);
+                return PickRoom(gridPosition, insertedDepth);
             }
+        }
+        if (insertedDepth == maxRoomDepth && !hasBoss)
+        {
+            hasBoss = true;
         }
         return pickedRoom;
     }
@@ -233,6 +246,11 @@ public class BoardMaker : MonoBehaviour
                 }
             }
         }
+    }
+
+    void PopulateDungeon()
+    {
+
     }
 
     void HideDungeon()
