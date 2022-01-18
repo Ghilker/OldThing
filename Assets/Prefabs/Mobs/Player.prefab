@@ -60,9 +60,10 @@ GameObject:
   - component: {fileID: 5274553093934247595}
   - component: {fileID: 338366300454305197}
   - component: {fileID: 4622848523766881091}
-  - component: {fileID: -5135098750428171245}
-  - component: {fileID: 3940548520005360222}
   - component: {fileID: 7851698718415782414}
+  - component: {fileID: -5135098750428171245}
+  - component: {fileID: 6506683800156558950}
+  - component: {fileID: 3900509935637657277}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -170,40 +171,9 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.2, y: 0.4}
+  m_Offset: {x: 0.015, y: -0.05}
+  m_Size: {x: 0.225, y: 0.6}
   m_Direction: 0
---- !u!114 &-5135098750428171245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5274553093934247594}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f526481435f87b439b5ecdb8189f1e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  anim: {fileID: 0}
-  hf: 0
-  vf: 0
-  speed: 4
-  teleporting: 0
-  movement: {x: 0, y: 0, z: 0}
---- !u!114 &3940548520005360222
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5274553093934247594}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2781e15c74bce5b45a00f54583109543, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _projectile: {fileID: 8707947431161663360, guid: a64281dfe6dd13645b7188582777a887, type: 3}
 --- !u!95 &7851698718415782414
 Animator:
   serializedVersion: 3
@@ -223,6 +193,49 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-5135098750428171245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5274553093934247594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f526481435f87b439b5ecdb8189f1e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 4
+  teleporting: 0
+--- !u!114 &6506683800156558950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5274553093934247594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2781e15c74bce5b45a00f54583109543, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3900509935637657277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5274553093934247594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed63854ceaa7a0340bb366b74ba921f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  availableAbilities:
+  - {fileID: 11400000, guid: d4fbf726adeb85b418be037c460ee641, type: 2}
+  - {fileID: 11400000, guid: 34bded7dfe9573748b5ee256ecf09d83, type: 2}
+  currentAbility: {fileID: 11400000, guid: d4fbf726adeb85b418be037c460ee641, type: 2}
+  abilityHolder: {fileID: 1092067029490394482}
 --- !u!1 &6407338053036729208
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,7 +248,7 @@ GameObject:
   - component: {fileID: 1912085931575710762}
   m_Layer: 0
   m_Name: ShootingPoint
-  m_TagString: Untagged
+  m_TagString: PlayerAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -261,7 +274,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6407338053036729208}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -269,4 +282,4 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.1
+  m_Radius: 0.3

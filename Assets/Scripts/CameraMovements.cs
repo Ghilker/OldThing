@@ -12,6 +12,10 @@ public class CameraMovements : MonoBehaviour
 
     private void Update()
     {
+        if (!player)
+        {
+            return;
+        }
         Vector3 position = player.transform.position + new Vector3(0f, 0f, -10f);
         transform.position = position;
 
