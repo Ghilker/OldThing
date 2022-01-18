@@ -25,3 +25,10 @@ public enum RoomSize
     BIG = 10,
     HUGE = 12
 }
+
+public enum AbilityType
+{
+    MELEE,
+    RANGED,
+    MAGIC
+}

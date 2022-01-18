@@ -12,7 +12,9 @@ TagManager:
   - Floor
   - Door
   - Bullet
-  - ObstacleSpawner
+  - Monster
+  - PlayerAttack
+  - MonsterAttack
   layers:
   - Default
   - TransparentFX
