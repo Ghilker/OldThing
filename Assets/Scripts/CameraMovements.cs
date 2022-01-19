@@ -14,6 +14,7 @@ public class CameraMovements : MonoBehaviour
     {
         if (!player)
         {
+            player = GameObject.FindGameObjectWithTag("Player");
             return;
         }
         Vector3 position = player.transform.position + new Vector3(0f, 0f, -10f);

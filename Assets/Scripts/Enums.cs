@@ -32,3 +32,12 @@ public enum AbilityType
     RANGED,
     MAGIC
 }
+
+public enum DungeonSize
+{
+    TINY = 2,
+    SMALL = 3,
+    MEDIUM = 4,
+    BIG = 5,
+    HUGE = 6
+}

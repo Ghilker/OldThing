@@ -15,6 +15,7 @@ TagManager:
   - Monster
   - PlayerAttack
   - MonsterAttack
+  - BoardGenerator
   layers:
   - Default
   - TransparentFX
