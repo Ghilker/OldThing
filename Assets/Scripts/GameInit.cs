@@ -12,9 +12,12 @@ public class GameInit : MonoBehaviour
 
     AsyncOperation sceneLoading;
 
+    public bool debug = true;
+
     // Start is called before the first frame update
     void Awake()
     {
+        if (debug) { boardMaker.BoardInit(dungeonDepth); }
         DontDestroyOnLoad(gameObject);
     }
 

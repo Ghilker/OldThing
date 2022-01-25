@@ -4,22 +4,11 @@ using UnityEngine;
 
 public class CameraMovements : MonoBehaviour
 {
+    public Vector3 offset;
+    public Quaternion rotation;
     GameObject player;
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
     }
-
-    private void Update()
-    {
-        if (!player)
-        {
-            player = GameObject.FindGameObjectWithTag("Player");
-            return;
-        }
-        Vector3 position = player.transform.position + new Vector3(0f, 0f, -10f);
-        transform.position = position;
-
-    }
-
 }

@@ -12,11 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eac123fe3ff0d04f91332e0d8893e0b, type: 3}
   m_Name: MeleeBasic
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
   abilityType: 0
   abilityName: BasicAttack
   abilityImage: {fileID: 0}
   abilityHolder: {fileID: 0}
-  abilityCooldown: 0.05
+  abilityCooldown: 0.5
   abilityDamage: 5
-  attackDistance: {x: 0.5, y: 0}
+  abilityAnimationType: BasicAttack
+  abilityEffect: {fileID: 0}
+  abilityAnimationController: {fileID: 0}
   attackSize: 0.3

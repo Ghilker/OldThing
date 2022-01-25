@@ -9,25 +9,39 @@ public class CharacterMovement : MonoBehaviour
     float hf = 0.0f;
     float vf = 0.0f;
 
-
     [SerializeField]
     private float speed = 10f;
+    public GameObject spriteHolder;
 
-    public bool teleporting = false;
     Vector3 movement;
+
+    Rigidbody rb;
+    Vector3 rayOffset = new Vector3(0f, -0.3f, 0f);
 
     private void Start()
     {
-        anim = this.GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
+        anim = spriteHolder.GetComponent<Animator>();
     }
 
     void Update()
     {
-        movement.x = Input.GetAxisRaw("Horizontal");
-        movement.y = Input.GetAxisRaw("Vertical");
+        RaycastHit[] hits = Physics.SphereCastAll(transform.position + rayOffset, .3f, Vector3.down, 0.5f);
 
+        movement.y += Physics.gravity.y * Time.deltaTime;
+
+        foreach (RaycastHit hitCheck in hits)
+        {
+            if (hitCheck.collider && hitCheck.collider.tag == "Floor")
+            {
+                movement.y = 0;
+                break;
+            }
+        }
+        movement.x = Input.GetAxisRaw("Horizontal");
+        movement.z = Input.GetAxisRaw("Vertical");
         hf = 0;
-        vf = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
+        vf = movement.z > 0.01f ? movement.z : movement.z < -0.01f ? 1 : 0;
         if (movement.x < -0.01f)
         {
             hf = -1;
@@ -36,23 +50,20 @@ public class CharacterMovement : MonoBehaviour
         {
             hf = 1;
         }
-
         anim.SetFloat("Horizontal", hf);
-        anim.SetFloat("Vertical", movement.y);
+        anim.SetFloat("Vertical", movement.z);
         anim.SetFloat("Speed", vf);
-
     }
 
     void FixedUpdate()
     {
-        GetComponent<Rigidbody2D>().velocity = movement * speed;
+        movement.Normalize();
+        rb.velocity = movement * speed;
     }
 
-    IEnumerator Teleport()
+    private void OnDrawGizmos()
     {
-        teleporting = true;
-        yield return new WaitForSeconds(1);
-        teleporting = false;
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position + rayOffset, .3f);
     }
-
 }

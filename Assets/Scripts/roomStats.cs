@@ -8,24 +8,49 @@ public class roomStats : MonoBehaviour
 {
     public int width;
     public int height;
-    public Vector2 roomCoordinates;
-    public List<Vector2> internalGrid = new List<Vector2>();
+    public direction connectedDirs;
+    public Vector3 roomCoordinates;
+    public List<Vector3> internalGrid = new List<Vector3>();
     public List<GameObject> doors;
     public int roomDepth = 0;
-    public bool isActive = true;
+    public bool isActive = false;
+    public RoomGenerator ourGen;
     public List<GameObject> monsters = new List<GameObject>();
     public List<GameObject> monsterSpawners;
     public List<GameObject> obstacleSpawners;
     public bool canSpawn = true;
     public bool isSpecial = false;
     public bool isBossRoom = false;
-    public NavMeshSurface2d navMesh;
+    public bool canProcess = true;
+    public NavMeshSurface navMesh;
 
+    public bool builtNavMesh = false;
     private void Update()
     {
+        if (!canProcess)
+        {
+            foreach (GameObject door in doors)
+            {
+                if (door == null)
+                {
+                    continue;
+                }
+                door.GetComponent<DoorStats>().DoorDisable();
+            }
+            return;
+        }
+        if (builtNavMesh == false)
+        {
+            if (!navMesh)
+            {
+                navMesh = GetComponent<NavMeshSurface>();
+            }
+            navMesh.BuildNavMesh();
+            builtNavMesh = true;
+        }
         if (!isActive) { return; }
-        bool shouldDeactivate = true;
 
+        bool shouldDeactivate = true;
         if (canSpawn)
         {
             SpawnObstacles();

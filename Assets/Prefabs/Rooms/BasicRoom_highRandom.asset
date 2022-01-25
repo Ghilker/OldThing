@@ -15,16 +15,19 @@ MonoBehaviour:
   outsideConnector: {fileID: 3449238360486327238, guid: 5129e1b95b8beb748891282b9da8852e, type: 3}
   roomHolder: {fileID: 2358413167560816232, guid: d49a1d290a674cc4b81fbf8a29731491, type: 3}
   floorArray:
-  - {fileID: 9062761369987290431, guid: dddb6ef05f4e9174e81614c250f098d9, type: 3}
-  - {fileID: 3048998536953405158, guid: a0132abd4ece3dc4cbc27fb5250db3a0, type: 3}
-  - {fileID: 7792583547525638896, guid: 6d46ec318fb79c24e958f6373f01ce72, type: 3}
+  - {fileID: 86622202859158060, guid: 44433de16788c50458f73028f2721de8, type: 3}
+  - {fileID: 2970989364146527780, guid: e98a4485dfd118c4aaef66d04c592777, type: 3}
+  - {fileID: 5622823165304390308, guid: 98a8a560c2618944abb4d41808c234d9, type: 3}
+  - {fileID: 1870633063408062082, guid: 69c68594a8f1c254bac6040dfa731876, type: 3}
+  - {fileID: 2518269729873688898, guid: 0e18abd04b56e4d40906292a7d7dca82, type: 3}
   wallArray:
-  - {fileID: 7690990573777163318, guid: 235cbd21dc479414d931965fc556177b, type: 3}
-  - {fileID: 5682507939468343725, guid: 5c38491d7fdcf4f419bea9e996904c7e, type: 3}
-  - {fileID: 5310720492750325055, guid: f0cffc5a5b19df2458e3864c56bd0423, type: 3}
+  - {fileID: 4345728633438522474, guid: b006c2ec702961c4aaf4050606da0577, type: 3}
+  - {fileID: 5022416769859428611, guid: 17120f175bc82d341aa50a5f05d5bae5, type: 3}
   obstacleArray:
-  - {fileID: 2490617431158514342, guid: 448b23bf502dcc142a8e8a69e6261c25, type: 3}
-  - {fileID: 1083304521653352805, guid: acaf2b5c875c577468c000cc097cfe91, type: 3}
-  door: {fileID: 3572056514483179247, guid: 1b0f3985b51c18f47bf95c8963dc49fc, type: 3}
-  width: 14
-  height: 8
+  - {fileID: 6315827365712263837, guid: 4cd1457e3c27cfe4d9396ebd0d6210d9, type: 3}
+  monsterSpawner: {fileID: 898880750962155432, guid: 251b17e8135799947803ca405041c27a, type: 3}
+  door: {fileID: 6744145930697591604, guid: de7297e37da2cd74994bc56013713707, type: 3}
+  width: 10
+  height: 10
+  obstacleAmounts: 10
+  monsterAmounts: 5

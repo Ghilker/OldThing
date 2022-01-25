@@ -7,40 +7,41 @@ public class AbilityMelee : AbilityBase
 {
 
     Transform attackPoint;
-    public Vector2 attackDistance = new Vector2(0.5f, 0f);
+    //public Vector2 attackDistance = new Vector2(0.5f, 0f);
     public float attackSize = 0.3f;
 
     public override void InitializeAbility(Transform abilityHolder)
     {
         attackPoint = abilityHolder;
         abilityType = AbilityType.MELEE;
-        abilityHolder.localPosition = attackDistance;
-        abilityHolder.GetComponent<CircleCollider2D>().radius = attackSize;
+        abilityAnimationController = abilityHolder.GetComponent<Animator>();
     }
 
     public override void TriggerAbility()
     {
-        CircleCollider2D pointOfAttack = attackPoint.GetComponent<CircleCollider2D>();
-        UseAbility(pointOfAttack);
+        UseAbility();
     }
 
-    public virtual void UseAbility(CircleCollider2D pointOfAttack)
+    public virtual void UseAbility()
     {
-        pointOfAttack.enabled = true;
-        PerformMeleeCheck();
-        CoroutineHelper.instance.StartCoroutine(MeleeCooldown(pointOfAttack));
+        abilityAnimationController.SetBool(abilityAnimationType, true);
+        player.GetComponent<CharacterPivotRotation>().canRotate = false;
+        CoroutineHelper.instance.StartCoroutine(PerformMeleeCheck());
+        CoroutineHelper.instance.StartCoroutine(MeleeCooldown());
     }
 
-    public virtual IEnumerator MeleeCooldown(CircleCollider2D pointOfAttack)
+    public virtual IEnumerator MeleeCooldown()
     {
         yield return new WaitForSeconds(abilityCooldown);
-        pointOfAttack.enabled = false;
+        abilityAnimationController.SetBool(abilityAnimationType, false);
+        player.GetComponent<CharacterPivotRotation>().canRotate = true;
     }
 
-    public virtual void PerformMeleeCheck()
+    public virtual IEnumerator PerformMeleeCheck()
     {
-        Collider2D[] collidersHit = Physics2D.OverlapCircleAll(attackPoint.position, attackSize);
-        foreach (Collider2D colliderHit in collidersHit)
+        yield return new WaitForSeconds(0.5f);
+        Collider[] collidersHit = Physics.OverlapSphere(attackPoint.position, attackSize);
+        foreach (Collider colliderHit in collidersHit)
         {
             if (colliderHit.tag != "Monster")
             {

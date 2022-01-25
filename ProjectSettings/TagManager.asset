@@ -16,6 +16,7 @@ TagManager:
   - PlayerAttack
   - MonsterAttack
   - BoardGenerator
+  - NavMeshBuilder
   layers:
   - Default
   - TransparentFX
