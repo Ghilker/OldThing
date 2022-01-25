@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Helper
 {
@@ -92,6 +93,19 @@ namespace Helper
 
     }
 
+    public class ListHelper
+    {
+        public static void ListToDebug<T>(List<T> listToDebug)
+        {
+            string output = "List contents: ";
+            foreach (var listObj in listToDebug)
+            {
+                output += listObj.ToString() + ", ";
+            }
+            Debug.Log(output);
+        }
+    }
+
     public class RandomHelper
     {
         public static bool prob(int value = 50)
@@ -103,7 +117,7 @@ namespace Helper
             }
             return false;
         }
-        public static Vector3 RandomPosition(List<Vector3> positions)
+        public static Vector3 RandomPosition(List<Vector3> positions, bool removeFromList = false)
         {
             if (positions.Count < 1)
             {
@@ -112,6 +126,10 @@ namespace Helper
             }
             int randomIndex = Random.Range(0, positions.Count);
             Vector3 randomPosition = positions[randomIndex];
+            if (removeFromList)
+            {
+                positions.Remove(randomPosition);
+            }
             return randomPosition;
         }
         public static void ShuffleList<T>(List<T> listToRandomize)
@@ -164,10 +182,10 @@ namespace Helper
             switch (dir)
             {
                 case direction.NORTH:
-                    endPoint += Vector3.up;
+                    endPoint += Vector3.forward;
                     break;
                 case direction.SOUTH:
-                    endPoint += Vector3.down;
+                    endPoint += Vector3.back;
                     break;
                 case direction.EAST:
                     endPoint += Vector3.right;
@@ -179,14 +197,14 @@ namespace Helper
             return endPoint;
         }
 
-        public static direction CheckVectorialDirection(Vector2 firstPoint, Vector2 secondPoint)
+        public static direction CheckVectorialDirection(Vector3 firstPoint, Vector3 secondPoint)
         {
             direction dir = direction.NORTH;
             float firstPointX = firstPoint.x;
-            float firstPointY = firstPoint.y;
+            float firstPointZ = firstPoint.z;
             float secondPointX = secondPoint.x;
-            float secondPointY = secondPoint.y;
-            if (firstPointY == secondPointY)
+            float secondPointZ = secondPoint.z;
+            if (firstPointZ == secondPointZ)
             {
                 if (firstPointX > secondPointX)
                 {
@@ -199,11 +217,11 @@ namespace Helper
             }
             else if (firstPointX == secondPointX)
             {
-                if (firstPointY > secondPointY)
+                if (firstPointZ > secondPointZ)
                 {
                     dir = direction.SOUTH;
                 }
-                else if (firstPointY < secondPointY)
+                else if (firstPointZ < secondPointZ)
                 {
                     dir = direction.NORTH;
                 }
@@ -254,28 +272,6 @@ namespace Helper
             return dir;
         }
 
-        public static Vector3 MoveVectorToOffset(Vector3 oldPosition, direction dir, int offset = 1)
-        {
-            Vector3 connectorPosition = oldPosition;
-            Vector3 centering = new Vector3(-offset, -offset, 0f);
-            switch (dir)
-            {
-                case direction.NORTH:
-                    connectorPosition += new Vector3(0f, 1f, 0f) * offset + centering;
-                    break;
-                case direction.SOUTH:
-                    connectorPosition += new Vector3(0f, -1f, 0f) * offset + centering;
-                    break;
-                case direction.EAST:
-                    connectorPosition += new Vector3(1f, 0f, 0f) * offset + centering;
-                    break;
-                case direction.WEST:
-                    connectorPosition += new Vector3(-1f, 0f, 0f) * offset + centering;
-                    break;
-            }
-            return connectorPosition;
-        }
-
         public static direction ReverseDirection(direction dir)
         {
             direction newDir = dir;
@@ -312,16 +308,16 @@ namespace Helper
             return isRoomPresent;
         }
 
-        public static Vector3 GetVectorOffsetInDir(direction dir, Vector3 startingVector, int offsetX = 0, int offsetY = 0)
+        public static Vector3 GetVectorOffsetInDir(direction dir, Vector3 startingVector, int offsetX = 0, int offsetY = 0, int offsetZ = 0)
         {
             Vector3 outputVector = startingVector;
             if (dir == direction.NORTH)
             {
-                outputVector += new Vector3(0f, offsetY, 0f);
+                outputVector += new Vector3(0f, 0f, offsetZ);
             }
             else if (dir == direction.SOUTH)
             {
-                outputVector += new Vector3(0f, -offsetY, 0f);
+                outputVector += new Vector3(0f, 0f, -offsetZ);
             }
             else if (dir == direction.EAST)
             {
@@ -386,4 +382,39 @@ namespace Helper
             return worldPosition;
         }
     }
+
+    public class NavMeshHelper
+    {
+        public static Vector3 RandomNavmeshLocation(float closestRadius, float furthestRadius, GameObject navMeshAgent)
+        {
+            NavMeshHit hit;
+            Vector3 finalPosition = Vector3.zero;
+            bool foundPosition = false;
+            while (!foundPosition)
+            {
+                Vector3 randomDirection = RandomPositionAroundCircle(closestRadius, furthestRadius, navMeshAgent);
+                if (NavMesh.SamplePosition(randomDirection, out hit, furthestRadius, NavMesh.AllAreas))
+                {
+                    finalPosition = hit.position;
+                    foundPosition = true;
+                }
+            }
+            return finalPosition;
+        }
+
+        public static Vector3 RandomPositionAroundCircle(float closestRadius, float furthestRadius, GameObject gameObject)
+        {
+            Vector3 randomDirection = Random.insideUnitCircle * furthestRadius;
+            randomDirection += gameObject.transform.position;
+            float distance = Vector3.Distance(randomDirection, gameObject.transform.position);
+            while (distance > furthestRadius && distance < closestRadius)
+            {
+                randomDirection = Random.insideUnitCircle * furthestRadius;
+                randomDirection += gameObject.transform.position;
+                distance = Vector3.Distance(randomDirection, gameObject.transform.position);
+            }
+            return randomDirection;
+        }
+    }
+
 }

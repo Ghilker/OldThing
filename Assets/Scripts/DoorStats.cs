@@ -13,25 +13,23 @@ public class DoorStats : MonoBehaviour
 
     public void DoorDisable()
     {
+        otherDoorObj.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+        otherDoorObj.GetComponent<BoxCollider>().isTrigger = true;
 
-        otherDoorObj.GetComponent<SpriteRenderer>().enabled = false;
-        otherDoorObj.GetComponent<BoxCollider2D>().isTrigger = true;
-
-        GetComponent<SpriteRenderer>().enabled = false;
-        GetComponent<BoxCollider2D>().isTrigger = true;
+        transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+        GetComponent<BoxCollider>().isTrigger = true;
     }
 
     public void DoorEnable()
     {
+        otherDoorObj.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+        otherDoorObj.GetComponent<BoxCollider>().isTrigger = false;
 
-        otherDoorObj.GetComponent<SpriteRenderer>().enabled = true;
-        otherDoorObj.GetComponent<BoxCollider2D>().isTrigger = false;
-
-        GetComponent<SpriteRenderer>().enabled = true;
-        GetComponent<BoxCollider2D>().isTrigger = false;
+        transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+        GetComponent<BoxCollider>().isTrigger = false;
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
@@ -42,15 +40,16 @@ public class DoorStats : MonoBehaviour
             Vector3 playerPosition = DirectionalMovement.MoveTo(dir, otherDoorObj.transform.position);
             other.gameObject.transform.position = playerPosition;
             other.GetComponent<CharacterMovement>().enabled = true;
-            //UpdateCamera();
+            UpdateCamera();
             RoomHide(otherDoorObj.GetComponent<DoorStats>().connectingRoom, connectingRoom);
         }
     }
 
     void UpdateCamera()
     {
-        Vector3 cameraPosition = new Vector3((connectingRoom.GetComponent<roomStats>().width + 1) / 2, (connectingRoom.GetComponent<roomStats>().height + 1) / 2, -10f);
-        Camera.main.transform.position = connectingRoom.transform.position + cameraPosition + new Vector3(0.5f, 0.5f, 0f);
+        roomStats connectingRoomStats = connectingRoom.GetComponent<roomStats>();
+        Vector3 cameraPosition = new Vector3((connectingRoomStats.width + 1) / 2, 10, (connectingRoomStats.height + 1) / 2);
+        Camera.main.transform.position = connectingRoom.transform.position + cameraPosition;
     }
 
     void RoomHide(GameObject oldRoom, GameObject newRoom)

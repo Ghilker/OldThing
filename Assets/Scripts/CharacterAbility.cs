@@ -8,6 +8,9 @@ public class CharacterAbility : MonoBehaviour
     public AbilityBase currentAbility;
     public Transform abilityHolder;
 
+    bool onCooldown = false;
+    float currentCooldownTime;
+
     private void Start()
     {
         InitializeAbility(abilityHolder, currentAbility);
@@ -16,6 +19,7 @@ public class CharacterAbility : MonoBehaviour
     void InitializeAbility(Transform holder, AbilityBase ability)
     {
         currentAbility.abilityHolder = holder;
+        currentAbility.player = gameObject;
         currentAbility.InitializeAbility(abilityHolder);
     }
 
@@ -37,7 +41,7 @@ public class CharacterAbility : MonoBehaviour
             Debug.Log(nextIndex);
             InitializeAbility(abilityHolder, currentAbility);
         }
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButton("Fire1") && !onCooldown)
         {
             ButtonTriggered();
         }
@@ -45,7 +49,15 @@ public class CharacterAbility : MonoBehaviour
 
     void ButtonTriggered()
     {
+        onCooldown = true;
         currentAbility.TriggerAbility();
+        StartCoroutine(AbilityCooldown());
+    }
+
+    IEnumerator AbilityCooldown()
+    {
+        yield return new WaitForSeconds(currentAbility.abilityCooldown);
+        onCooldown = false;
     }
 
 }

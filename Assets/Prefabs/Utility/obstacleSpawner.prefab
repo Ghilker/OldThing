@@ -45,8 +45,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rockObstacles:
-  - {fileID: 2490617431158514342, guid: 448b23bf502dcc142a8e8a69e6261c25, type: 3}
-  - {fileID: 1083304521653352805, guid: acaf2b5c875c577468c000cc097cfe91, type: 3}
+  - {fileID: 7309841292603349096, guid: 448b23bf502dcc142a8e8a69e6261c25, type: 3}
+  - {fileID: 884326434512798450, guid: acaf2b5c875c577468c000cc097cfe91, type: 3}
+  square: 0
+  canSpawn: 1
 --- !u!58 &8329192546227841108
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -13,18 +13,12 @@ public class EnemyAi : MonoBehaviour
 
     bool attacking = false;
 
+    public BaseAI currentAI;
+
     // Start is called before the first frame update
     void Start()
     {
-        enemyAgent = GetComponent<NavMeshAgent>();
-        enemyAgent.updateRotation = false;
-        enemyAgent.updateUpAxis = false;
-        target = GameObject.FindGameObjectWithTag("Player");
-    }
-
-    private void Update()
-    {
-        FollowPlayer();
+        currentAI.InitializeAI(gameObject);
     }
 
     public void FollowPlayer()
