@@ -9,10 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 35711978820510302}
-  - component: {fileID: -7160149621398865381}
+  - component: {fileID: -8539935419433795629}
   - component: {fileID: 6632670480998436885}
   - component: {fileID: -4268441551707629239}
-  - component: {fileID: 2650763006962105019}
   - component: {fileID: 6427496162809465332}
   - component: {fileID: 4889889475760589698}
   m_Layer: 0
@@ -34,10 +33,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2386599388860165318}
+  - {fileID: 395048945645313134}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-7160149621398865381
+--- !u!114 &-8539935419433795629
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -46,11 +46,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 4525261432589092192}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31b3564e9c3bc274f9ec799da1bb13c9, type: 3}
+  m_Script: {fileID: 11500000, guid: 62e0ee06572c9a948bfe02655943b7e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackDistance: 1.6
-  currentAI: {fileID: 2650763006962105019}
+  currentState: {fileID: 11400000, guid: 6aee00a03d9592a428773f4118528419, type: 2}
+  enemyStats: {fileID: 6632670480998436885}
+  eyesPivot: {fileID: 395048945645313134}
+  eyes: {fileID: 8852221616637340194}
+  remainState: {fileID: 11400000, guid: 0d722c6648c71ef4dafcfc6d2083109d, type: 2}
+  navMeshAgent: {fileID: 0}
+  chaseTarget: {fileID: 0}
+  stateTimeElapsed: 0
 --- !u!114 &6632670480998436885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,7 +71,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isAlive: 1
   lifePoints: 5
-  damageDone: 2
+  lookRange: 5
+  lookSphereCastRadius: 0.8
+  searchingTurnSpeed: 4
+  searchDuration: 2
+  attackRange: 3
+  attackRate: 1.5
+  attackForce: 2
 --- !u!195 &-4268441551707629239
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -88,35 +100,6 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &2650763006962105019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4525261432589092192}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8bab7c9fdc0cc409cf5a899531ef80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  aiFaction: 
-  minFollowDistance: 1.5
-  maxFollowDistance: 5
-  isActive: 1
-  isStationary: 0
-  isAttackingPlayer: 0
-  isMoving: 0
-  canAttack: 0
-  canMove: 0
-  canMoveWhileAttacking: 0
-  canTakeDamage: 0
-  moveToPosition: {x: 0, y: 0, z: 0}
-  abilityType: 0
-  minAttackDistance: 0
-  maxAttackDistance: 2
-  minAttackDamage: 0
-  maxAttackDamage: 0
 --- !u!54 &6427496162809465332
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -146,6 +129,67 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.4
   m_Center: {x: 0, y: -0.05, z: 0}
+--- !u!1 &5149064024024614610
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8852221616637340194}
+  m_Layer: 0
+  m_Name: Eyes
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8852221616637340194
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5149064024024614610}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 395048945645313134}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5457358256458211569
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 395048945645313134}
+  m_Layer: 0
+  m_Name: Pivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &395048945645313134
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5457358256458211569}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8852221616637340194}
+  m_Father: {fileID: 35711978820510302}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8039390646167543660
 GameObject:
   m_ObjectHideFlags: 0
