@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MonsterStats : MonoBehaviour
 {
-
     public bool isAlive = true;
 
     public int lifePoints = 5;
@@ -13,9 +12,15 @@ public class MonsterStats : MonoBehaviour
     public float lookSphereCastRadius = 1;
     public float searchingTurnSpeed = 3;
     public float searchDuration = 2;
-    public float attackRange = 1;
+    public float maxAttackRange = 2;
+    public float minAttackRange = 1;
     public float attackRate = 1.5f;
     public float attackDamage = 2;
+
+    public float magicAttackSpeed = 2f;
+
+    public Transform eyes;
+    public AttackAI attack;
 
     public void TakeDamage(int amount)
     {
@@ -24,6 +29,11 @@ public class MonsterStats : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public void PerformAttack()
+    {
+        attack.Act(this);
     }
 
 }

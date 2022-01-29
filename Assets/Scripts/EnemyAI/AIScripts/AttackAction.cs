@@ -14,14 +14,14 @@ public class AttackAction : Action
     {
         RaycastHit hit;
 
-        Debug.DrawRay(controller.eyes.position, controller.eyes.forward.normalized * controller.enemyStats.attackRange, Color.red);
+        Debug.DrawRay(controller.eyes.position, controller.eyes.forward.normalized * controller.enemyStats.maxAttackRange, Color.red);
         controller.navMeshAgent.isStopped = true;
-        if (Physics.SphereCast(controller.eyes.position, controller.enemyStats.lookSphereCastRadius, controller.eyes.forward, out hit, controller.enemyStats.attackRange)
+        if (Physics.SphereCast(controller.eyes.position, controller.enemyStats.lookSphereCastRadius, controller.eyes.forward, out hit, controller.enemyStats.maxAttackRange)
             && hit.collider.CompareTag("Player"))
         {
             if (controller.CheckIfCountDownElapsed(controller.enemyStats.attackRate))
             {
-                Debug.Log("HIT");
+                controller.enemyStats.PerformAttack();
                 controller.stateTimeElapsed = 0;
             }
         }

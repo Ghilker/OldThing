@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 052fcdefb90812d4f91a2630e4a40be2, type: 3}
-  m_Name: ChaseState
+  m_Name: GetAwayState
   m_EditorClassIdentifier: 
   actions:
-  - {fileID: 11400000, guid: b4dc923c7cafdbb4186baf0159344822, type: 2}
+  - {fileID: 11400000, guid: b5eeac309be457e498384407544c972d, type: 2}
   transitions:
-  - decision: {fileID: 11400000, guid: d77929972f0849e41858d96ec50fc606, type: 2}
+  - decision: {fileID: 11400000, guid: e857d6eb330cbf9498d76376463c8edb, type: 2}
     trueState: {fileID: 11400000, guid: 5d33009ec3d47bb41bbb273de7d5d305, type: 2}
     falseState: {fileID: 11400000, guid: 0d722c6648c71ef4dafcfc6d2083109d, type: 2}
   sceneGizmoColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}

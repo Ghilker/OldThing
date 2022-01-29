@@ -62,5 +62,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemies:
   - {fileID: 4525261432589092192, guid: e9f55e9fc814fe84d9f2dd7aa6c9e174, type: 3}
+  - {fileID: 6289873342143052813, guid: 260a87320ff8e7b459ab3fbe912ee443, type: 3}
   room: {fileID: 0}
   canSpawn: 1

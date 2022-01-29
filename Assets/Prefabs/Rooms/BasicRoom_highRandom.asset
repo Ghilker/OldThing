@@ -29,5 +29,7 @@ MonoBehaviour:
   door: {fileID: 6744145930697591604, guid: de7297e37da2cd74994bc56013713707, type: 3}
   width: 10
   height: 10
-  obstacleAmounts: 10
-  monsterAmounts: 5
+  minObstacleAmount: 5
+  maxObstacleAmount: 8
+  minMonsterAmount: 2
+  maxMonsterAmounts: 4

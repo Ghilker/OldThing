@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 170786425365261890}
   - component: {fileID: 5342620658014255273}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: BulletZ
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 5212763145156244569}
   - component: {fileID: 3115247842739709516}
   - component: {fileID: 977072235686507160}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Bullet
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -5120,7 +5120,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2736677426572733544}
   - component: {fileID: 570239109823119126}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: BulletX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
