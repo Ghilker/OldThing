@@ -40,6 +40,7 @@ public class MagicBulletStats : MonoBehaviour
         bulletRb.velocity = Vector3.zero;
         bulletRb.freezeRotation = true;
         particles.Play();
+        Destroy(gameObject, particles.main.duration);
     }
 
     private void OnCollisionEnter(Collision other)
@@ -54,10 +55,14 @@ public class MagicBulletStats : MonoBehaviour
             rigidBody.velocity = vel;
             rigidBody.angularVelocity = angularVel;
             transform.position = position;
+            if (rigidBody.velocity == Vector3.zero)
+            {
+                BulletExplosion();
+            }
             return;
         }
         BulletExplosion();
-        Destroy(gameObject, particles.main.duration);
+
     }
 
     private void OnTriggerEnter(Collider other)

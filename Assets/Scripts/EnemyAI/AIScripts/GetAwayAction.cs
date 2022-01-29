@@ -14,10 +14,14 @@ public class GetAwayAction : Action
 
     private void GetAway(StateController controller)
     {
-        if (controller.navMeshAgent.pathStatus == NavMeshPathStatus.PathComplete && controller.navMeshAgent.remainingDistance == 0)
-        {
-            controller.navMeshAgent.destination = NavMeshHelper.RandomPositionAroundCircle(controller.enemyStats.minAttackRange, controller.enemyStats.maxAttackRange, controller.gameObject);
-        }
+
+
+        controller.navMeshAgent.isStopped = false;
+        Vector3 direction = controller.chaseTarget.position - controller.eyesPivot.position;
+        direction.Normalize();
+        controller.navMeshAgent.destination = controller.eyesPivot.position - direction * controller.enemyStats.minAttackRange;
+
+
 
     }
 }

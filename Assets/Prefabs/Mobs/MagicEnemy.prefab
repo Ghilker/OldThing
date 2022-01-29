@@ -215,7 +215,7 @@ MonoBehaviour:
   isAlive: 1
   lifePoints: 5
   lookRange: 5
-  lookSphereCastRadius: 0.4
+  lookSphereCastRadius: 0.1
   searchingTurnSpeed: 4
   searchDuration: 2
   maxAttackRange: 5
