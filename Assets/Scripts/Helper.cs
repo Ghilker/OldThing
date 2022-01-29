@@ -410,8 +410,9 @@ namespace Helper
             float distance = Vector3.Distance(randomDirection, gameObject.transform.position);
             while (distance > furthestRadius && distance < closestRadius)
             {
-                randomDirection = Random.insideUnitCircle * furthestRadius;
+                randomDirection = Random.insideUnitSphere * furthestRadius;
                 randomDirection += gameObject.transform.position;
+                randomDirection.y = gameObject.transform.position.y;
                 distance = Vector3.Distance(randomDirection, gameObject.transform.position);
             }
             return randomDirection;
