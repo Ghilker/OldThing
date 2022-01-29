@@ -404,8 +404,9 @@ namespace Helper
 
         public static Vector3 RandomPositionAroundCircle(float closestRadius, float furthestRadius, GameObject gameObject)
         {
-            Vector3 randomDirection = Random.insideUnitCircle * furthestRadius;
+            Vector3 randomDirection = Random.insideUnitSphere * furthestRadius;
             randomDirection += gameObject.transform.position;
+            randomDirection.y = gameObject.transform.position.y;
             float distance = Vector3.Distance(randomDirection, gameObject.transform.position);
             while (distance > furthestRadius && distance < closestRadius)
             {
