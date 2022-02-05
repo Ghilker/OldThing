@@ -3,8 +3,7 @@ using static Helper.MouseCamera;
 
 public class CharacterPivotRotation : MonoBehaviour
 {
-    public Transform rotatingPivot;
-    public Transform armPoint;
+    public Transform weapon;
     public bool canRotate = true;
 
     void Update()
@@ -14,15 +13,8 @@ public class CharacterPivotRotation : MonoBehaviour
             return;
         }
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);
-
-        RaycastHit hit;
-        if (Physics.Raycast(ray.origin, ray.direction, out hit))
-        {
-            Vector3 hitPosition = hit.point;
-            hitPosition.y = rotatingPivot.position.y;
-            rotatingPivot.LookAt(hitPosition);
-        }
+        Vector3 dir = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        weapon.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 }

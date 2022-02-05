@@ -17,10 +17,11 @@ MonoBehaviour:
   abilityName: 
   abilityImage: {fileID: 0}
   abilityHolder: {fileID: 0}
-  abilityCooldown: 0.5
+  abilityCooldown: 0.1
   abilityDamage: 0
   abilityAnimationType: 
   abilityEffect: {fileID: 0}
   abilityAnimationController: {fileID: 0}
-  magicBullet: {fileID: 8707947431161663360, guid: a64281dfe6dd13645b7188582777a887, type: 3}
-  bulletForce: 10
+  magicBullet: {fileID: 919245898278628939, guid: 323a92a156b7ad5439098a16be105239, type: 3}
+  magicBulletTarget: Monster
+  bulletForce: 4

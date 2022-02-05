@@ -22,8 +22,8 @@ public class BoardMaker : MonoBehaviour
 
     public List<GameObject> bossRooms;
     [SerializeField]
-    GameObject bossRoom;
-    bool hasBoss = false;
+    //GameObject bossRoom;
+    //bool hasBoss = false;
 
     public GameObject player;
     public GameObject closingWallObj;
@@ -43,8 +43,14 @@ public class BoardMaker : MonoBehaviour
 
     public RoomGenerator gen;
 
+    public bool active = true;
+
     public void BoardInit(int dungeonDepth)
     {
+        if (!active)
+        {
+            return;
+        }
         mainCamera = Camera.main;
         maxRoomDepth = dungeonDepth;
         GenerateBoard();

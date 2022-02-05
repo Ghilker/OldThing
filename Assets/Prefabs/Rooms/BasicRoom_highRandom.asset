@@ -27,8 +27,8 @@ MonoBehaviour:
   - {fileID: 6315827365712263837, guid: 4cd1457e3c27cfe4d9396ebd0d6210d9, type: 3}
   monsterSpawner: {fileID: 898880750962155432, guid: 251b17e8135799947803ca405041c27a, type: 3}
   door: {fileID: 6744145930697591604, guid: de7297e37da2cd74994bc56013713707, type: 3}
-  width: 10
-  height: 10
+  width: 16
+  height: 4
   minObstacleAmount: 5
   maxObstacleAmount: 8
   minMonsterAmount: 2

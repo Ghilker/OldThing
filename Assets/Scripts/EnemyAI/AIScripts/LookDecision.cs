@@ -17,8 +17,11 @@ public class LookDecision : Decision
         RaycastHit hit;
 
         Debug.DrawRay(controller.eyes.position, controller.eyes.forward.normalized * controller.enemyStats.lookRange, Color.green);
+        Vector3 targetDirection = controller.chaseTarget.position - controller.eyesPivot.position;
+        Vector3 newRotation = Vector3.RotateTowards(controller.eyesPivot.forward, targetDirection, controller.enemyStats.searchingTurnSpeed * Time.deltaTime, 0f);
+        controller.eyesPivot.rotation = Quaternion.LookRotation(newRotation);
 
-        if (Physics.SphereCast(controller.eyes.position, controller.enemyStats.lookSphereCastRadius, controller.eyes.forward, out hit, controller.enemyStats.lookRange)
+        if (Physics.SphereCast(controller.eyesPivot.position, controller.enemyStats.lookSphereCastRadius, controller.eyes.forward, out hit, controller.enemyStats.lookRange)
             && hit.collider.CompareTag("Player"))
         {
             controller.chaseTarget = hit.transform;

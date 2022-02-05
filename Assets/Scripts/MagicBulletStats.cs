@@ -9,6 +9,7 @@ public class MagicBulletStats : MonoBehaviour
     public int damage = 5;
     public GameObject bRender1;
     public GameObject bRender2;
+    public string bulletTarget = "Monster";
 
     private Collider col;
     private Rigidbody rigidBody;
@@ -45,11 +46,25 @@ public class MagicBulletStats : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.transform.tag == "Monster")
+        if (other.transform.tag == bulletTarget)
         {
-            other.transform.gameObject.GetComponent<MonsterStats>().TakeDamage(damage);
+            if (other.transform.tag == "Monster")
+            {
+                other.transform.gameObject.GetComponent<MonsterStats>().TakeDamage(damage);
+            }
+            else if (other.transform.tag == "Player")
+            {
+
+            }
+            BulletExplosion();
+            return;
         }
-        if (other.transform.tag == "Obstacle")
+        else if (other.transform.tag == "Wall")
+        {
+            BulletExplosion();
+            return;
+        }
+        else
         {
             Physics.IgnoreCollision(col, other.collider);
             rigidBody.velocity = vel;
@@ -61,8 +76,6 @@ public class MagicBulletStats : MonoBehaviour
             }
             return;
         }
-        BulletExplosion();
-
     }
 
     private void OnTriggerEnter(Collider other)

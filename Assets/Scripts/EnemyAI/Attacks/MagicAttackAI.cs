@@ -6,6 +6,8 @@ using UnityEngine;
 public class MagicAttackAI : AttackAI
 {
     public GameObject bulletPrefab;
+    public string magicBulletTarget = "Player";
+
     public override void Act(MonsterStats stats)
     {
         Attack(stats);
@@ -15,6 +17,7 @@ public class MagicAttackAI : AttackAI
     {
         GameObject instantiatedBullet = Instantiate(bulletPrefab, stats.eyes.position, Quaternion.identity);
         Rigidbody bulletRb = instantiatedBullet.GetComponent<Rigidbody>();
+        instantiatedBullet.GetComponent<MagicBulletStats>().bulletTarget = magicBulletTarget;
         bulletRb.AddForce(stats.eyes.forward.normalized * stats.magicAttackSpeed, ForceMode.Impulse);
     }
 }

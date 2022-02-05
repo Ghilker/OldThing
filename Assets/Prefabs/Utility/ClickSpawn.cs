@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 using System.Collections.Generic;
 
 #if UNITY_EDITOR
@@ -42,4 +42,4 @@ public class ClickSpawn : MonoBehaviour
         return placeObject ? newPosition : HandleUtility.GUIPointToWorldRay(mousePosition).GetPoint(10);
     }
 }
-#endif
+#endif*/

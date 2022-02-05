@@ -7,6 +7,7 @@ public class AbilityMagic : AbilityBase
 {
     Transform magicShootingPoint;
     public GameObject magicBullet;
+    public string magicBulletTarget = "Monster";
 
     public float bulletForce = 0f;
 
@@ -22,8 +23,9 @@ public class AbilityMagic : AbilityBase
 
     public virtual void UseMagic()
     {
-        GameObject instantiatedBullet = Instantiate(magicBullet, magicShootingPoint.position, Quaternion.identity);
-        Rigidbody bulletRb = instantiatedBullet.GetComponent<Rigidbody>();
-        bulletRb.AddForce(magicShootingPoint.forward.normalized * bulletForce, ForceMode.Impulse);
+        GameObject instantiatedBullet = Instantiate(magicBullet, magicShootingPoint.position + magicShootingPoint.right * 0.5f, Quaternion.identity);
+        //instantiatedBullet.GetComponent<MagicBulletStats>().bulletTarget = magicBulletTarget;
+        Rigidbody2D bulletRb = instantiatedBullet.GetComponent<Rigidbody2D>();
+        bulletRb.AddForce(magicShootingPoint.right.normalized * bulletForce, ForceMode2D.Impulse);
     }
 }
