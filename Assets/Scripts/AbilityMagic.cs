@@ -24,7 +24,7 @@ public class AbilityMagic : AbilityBase
     public virtual void UseMagic()
     {
         GameObject instantiatedBullet = Instantiate(magicBullet, magicShootingPoint.position + magicShootingPoint.right * 0.5f, Quaternion.identity);
-        //instantiatedBullet.GetComponent<MagicBulletStats>().bulletTarget = magicBulletTarget;
+        instantiatedBullet.GetComponent<MagicBulletStats>().bulletTarget = magicBulletTarget;
         Rigidbody2D bulletRb = instantiatedBullet.GetComponent<Rigidbody2D>();
         bulletRb.AddForce(magicShootingPoint.right.normalized * bulletForce, ForceMode2D.Impulse);
     }

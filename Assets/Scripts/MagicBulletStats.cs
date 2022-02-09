@@ -7,22 +7,21 @@ using Helper;
 public class MagicBulletStats : MonoBehaviour
 {
     public int damage = 5;
-    public GameObject bRender1;
-    public GameObject bRender2;
+    public int maxBounces = 2;
     public string bulletTarget = "Monster";
 
-    private Collider col;
-    private Rigidbody rigidBody;
+    private Collider2D col;
+    private Rigidbody2D rigidBody;
     private Vector3 vel;
-    private Vector3 angularVel;
+    private float angularVel;
     private Vector3 position;
-    private ParticleSystem particles;
+    private int currentBounces = 0;
 
     private void Start()
     {
-        col = gameObject.GetComponent<Collider>();
-        rigidBody = gameObject.GetComponent<Rigidbody>();
-        particles = GetComponent<ParticleSystem>();
+        col = gameObject.GetComponent<Collider2D>();
+        rigidBody = gameObject.GetComponent<Rigidbody2D>();
+        Destroy(gameObject, 5);
     }
 
     private void FixedUpdate()
@@ -34,18 +33,17 @@ public class MagicBulletStats : MonoBehaviour
 
     void BulletExplosion()
     {
-        Rigidbody bulletRb = GetComponent<Rigidbody>();
-        GetComponent<Collider>().enabled = false;
-        bRender1.GetComponent<Renderer>().enabled = false;
-        bRender2.GetComponent<Renderer>().enabled = false;
+        Rigidbody2D bulletRb = GetComponent<Rigidbody2D>();
+        GetComponent<Collider2D>().enabled = false;
+        GetComponent<Renderer>().enabled = false;
         bulletRb.velocity = Vector3.zero;
         bulletRb.freezeRotation = true;
-        particles.Play();
-        Destroy(gameObject, particles.main.duration);
+        Destroy(gameObject);
     }
 
-    private void OnCollisionEnter(Collision other)
+    private void OnCollisionEnter2D(Collision2D other)
     {
+
         if (other.transform.tag == bulletTarget)
         {
             if (other.transform.tag == "Monster")
@@ -61,16 +59,25 @@ public class MagicBulletStats : MonoBehaviour
         }
         else if (other.transform.tag == "Wall")
         {
-            BulletExplosion();
+            if (currentBounces == maxBounces)
+            {
+                BulletExplosion();
+                return;
+            }
+            float speed = vel.magnitude;
+            Vector2 bulletReflectionDirection = Vector2.Reflect(vel, other.contacts[0].normal);
+            vel = rigidBody.velocity = bulletReflectionDirection.normalized * speed;
+            currentBounces++;
+
             return;
         }
         else
         {
-            Physics.IgnoreCollision(col, other.collider);
+            Physics2D.IgnoreCollision(col, other.collider);
             rigidBody.velocity = vel;
             rigidBody.angularVelocity = angularVel;
             transform.position = position;
-            if (rigidBody.velocity == Vector3.zero)
+            if (rigidBody.velocity == Vector2.zero)
             {
                 BulletExplosion();
             }
@@ -78,7 +85,7 @@ public class MagicBulletStats : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         Destroy(gameObject);
     }

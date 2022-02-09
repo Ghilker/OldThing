@@ -24,4 +24,4 @@ MonoBehaviour:
   abilityAnimationController: {fileID: 0}
   magicBullet: {fileID: 919245898278628939, guid: 323a92a156b7ad5439098a16be105239, type: 3}
   magicBulletTarget: Monster
-  bulletForce: 4
+  bulletForce: 0.09

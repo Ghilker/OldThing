@@ -9,9 +9,7 @@ public class MonsterStats : MonoBehaviour
     public int lifePoints = 5;
 
     public float lookRange = 3;
-    public float lookSphereCastRadius = 1;
-    public float searchingTurnSpeed = 3;
-    public float searchDuration = 2;
+
     public float maxAttackRange = 2;
     public float minAttackRange = 1;
     public float attackRate = 1.5f;
@@ -20,7 +18,10 @@ public class MonsterStats : MonoBehaviour
     public float magicAttackSpeed = 2f;
 
     public Transform eyes;
-    public AttackAI attack;
+
+    float attackTime;
+    public float completion;
+    public bool isLeaping;
 
     public void TakeDamage(int amount)
     {
@@ -29,11 +30,6 @@ public class MonsterStats : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
-
-    public void PerformAttack()
-    {
-        attack.Act(this);
     }
 
 }
