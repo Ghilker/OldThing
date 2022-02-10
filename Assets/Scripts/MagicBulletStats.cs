@@ -44,20 +44,20 @@ public class MagicBulletStats : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D other)
     {
 
-        if (other.transform.tag == bulletTarget)
+        if (other.transform.CompareTag(bulletTarget))
         {
-            if (other.transform.tag == "Monster")
+            if (other.transform.CompareTag("Monster"))
             {
                 other.transform.gameObject.GetComponent<MonsterStats>().TakeDamage(damage);
             }
-            else if (other.transform.tag == "Player")
+            else if (other.transform.CompareTag("Player"))
             {
 
             }
             BulletExplosion();
             return;
         }
-        else if (other.transform.tag == "Wall")
+        else if (other.transform.CompareTag("Wall") || other.transform.CompareTag("Door"))
         {
             if (currentBounces == maxBounces)
             {
@@ -83,10 +83,5 @@ public class MagicBulletStats : MonoBehaviour
             }
             return;
         }
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        Destroy(gameObject);
     }
 }

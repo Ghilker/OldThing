@@ -16,11 +16,15 @@ public class LeapAttacker : MonoBehaviour
     float lastLeap;
     NavMeshAgent agent;
 
+    Vector2 lastSeenPosition;
+    float lastSeenTime;
+
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         agent.updateUpAxis = false;
+        lastSeenPosition = transform.position;
     }
 
     void Update()
@@ -29,6 +33,12 @@ public class LeapAttacker : MonoBehaviour
 
         if (CheckForObstacle(distance))
         {
+            lastSeenTime += Time.deltaTime;
+            if (lastSeenTime < 3)
+            {
+                agent.isStopped = false;
+                agent.destination = lastSeenPosition;
+            }
             return;
         }
 
@@ -39,6 +49,8 @@ public class LeapAttacker : MonoBehaviour
         }
         if (distance < 2 && !isLeaping && LeapRecharge())
         {
+            lastSeenPosition = player.position;
+            lastSeenTime = 0;
             lastLeap = 0;
             agent.isStopped = true;
             StartCoroutine(LeapAttack(transform.position, player.position, .5f));

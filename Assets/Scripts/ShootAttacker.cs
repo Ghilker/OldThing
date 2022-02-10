@@ -13,8 +13,8 @@ public class ShootAttacker : MonoBehaviour
     public Transform eyes;
     public GameObject projectilePrefab;
 
-    public Vector2 lastSeenPosition;
-    public float lastSeenTime;
+    Vector2 lastSeenPosition;
+    float lastSeenTime;
 
     public float attackTime = 1f;
     public float bulletSpeed = 0.05f;

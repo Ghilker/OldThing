@@ -1,0 +1,115 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Tiles
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 0
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 0
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 2
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 9157084423362550850, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: -5254272431375392966, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: -3828044540758156442, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: -4584470612761372700, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: 8824323602437937216, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: -7129027627236911448, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: 8924279475257873488, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: 2045628036143422094, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: 531082791811694087, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: 8454586391010398395, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: -5088150117964129960, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: -9155418111395736000, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: 3713055610419314494, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: -1397285591540399276, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: -3092822995373794632, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: -4355855831519066538, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: 8262283404641918694, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: -7889337738420555452, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: 1275556940629454162, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: 8096020343382418459, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: -4710489244614017570, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: 8046671399388144062, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: -6528693904430566213, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: 5952416728045464082, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: -3752214822723310615, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: -5888117812929362368, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: 7378178127862665494, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: 6716504725054552036, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: -2371098612947919322, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  - {fileID: -3882154176471752116, guid: 70e3159f02167f146aff74d3f680f387, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - BlueTileset_8
+  - BlueTileset_9
+  - BlueTileset_0
+  - BlueTileset_1
+  - BlueTileset_2
+  - BlueTileset_3
+  - BlueTileset_4
+  - BlueTileset_5
+  - BlueTileset_6
+  - BlueTileset_7
+  - BlueTileset_19
+  - BlueTileset_18
+  - BlueTileset_13
+  - BlueTileset_12
+  - BlueTileset_28
+  - BlueTileset_11
+  - BlueTileset_29
+  - BlueTileset_10
+  - BlueTileset_26
+  - BlueTileset_17
+  - BlueTileset_27
+  - BlueTileset_16
+  - BlueTileset_24
+  - BlueTileset_15
+  - BlueTileset_25
+  - BlueTileset_14
+  - BlueTileset_22
+  - BlueTileset_23
+  - BlueTileset_20
+  - BlueTileset_21
+  m_RenderDataMap: {}
+  m_Tag: Tiles
+  m_IsVariant: 0
